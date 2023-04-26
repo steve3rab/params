@@ -21,7 +21,6 @@ public class ParameterIT {
 
 		assertEquals(1, category.getParameterItems().size());
 		assertTrue(category.getParameterItems().containsKey(label));
-		assertEquals(item, category.getParameterItemByLabel(label));
 	}
 
 }

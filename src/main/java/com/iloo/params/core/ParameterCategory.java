@@ -52,22 +52,6 @@ public class ParameterCategory {
 	}
 
 	/**
-	 * Returns a map of the parameter items belonging to
-	 * {@link ParameterItem#getLabel()}.
-	 *
-	 * @return a map of the parameter items belonging to
-	 *         {@link ParameterItem#getLabel()}.
-	 */
-	public ParameterItem<?> getParameterItemByLabel(String label) {
-		for (ParameterItem<?> parameterItem : parameterItems.values()) {
-			if (parameterItem.getLabel().equals(label)) {
-				return parameterItem;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Adds a parameter item to this category.
 	 *
 	 * @param parameterItem the parameter item to put.
@@ -75,7 +59,7 @@ public class ParameterCategory {
 	 */
 	public void addParameterItem(ParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
-		if (parameterItems.containsValue(parameterItem)) {
+		if (parameterItems.containsKey(parameterItem.getLabel())) {
 			throw new IllegalArgumentException("Parameter item already exists in the category");
 		}
 
