@@ -1,10 +1,12 @@
 package com.iloo.params.core;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Represents a category of parameters.
@@ -12,7 +14,7 @@ import java.util.Objects;
 public class ParameterCategory {
 	private final String label;
 	private final String description;
-	private final Map<String, ParameterItem<?>> parameterItems = new HashMap<>();
+	private final Map<String, ParameterItem<?>> parameterItems;
 	private ParameterCategory parentCategory;
 
 	/**
@@ -24,6 +26,7 @@ public class ParameterCategory {
 	ParameterCategory(String label, String description) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.description = Objects.requireNonNull(description, "Description cannot be null");
+		parameterItems = new HashMap<>();
 	}
 
 	/**
@@ -50,7 +53,7 @@ public class ParameterCategory {
 	 * @return a map of the parameter items belonging to this category.
 	 */
 	public Map<String, ParameterItem<?>> getParameterItems() {
-		return Map.copyOf(parameterItems);
+		return Collections.unmodifiableMap(parameterItems);
 	}
 
 	/**
@@ -61,9 +64,10 @@ public class ParameterCategory {
 	 */
 	public void addParameterItem(ParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
-		if (parameterItems.containsKey(parameterItem.getLabel())) {
+
+		parameterItems.computeIfPresent(parameterItem.getLabel(), (label, existingItem) -> {
 			throw new IllegalArgumentException("Parameter item already exists in the category");
-		}
+		});
 
 		parameterItems.put(parameterItem.getLabel(), parameterItem);
 		parameterItem.getCategory().setParentCategory(this);
@@ -106,13 +110,8 @@ public class ParameterCategory {
 	 * @return list of parent categories
 	 */
 	public List<ParameterCategory> getAllParentCategories() {
-		List<ParameterCategory> parentCategories = new ArrayList<>();
-		ParameterCategory parent = parentCategory;
-		while (parent != null) {
-			parentCategories.add(parent);
-			parent = parent.getParentCategory();
-		}
-		return parentCategories;
+		return Stream.iterate(getParentCategory(), Objects::nonNull, ParameterCategory::getParentCategory)
+				.collect(Collectors.toList());
 	}
 
 	@Override
