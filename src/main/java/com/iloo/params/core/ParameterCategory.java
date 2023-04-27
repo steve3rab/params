@@ -98,6 +98,17 @@ public class ParameterCategory {
 		return parentCategory == null;
 	}
 
+public List<ParameterCategory> getAllParentCategories() {
+    List<ParameterCategory> parentCategories = new ArrayList<>();
+    ParameterCategory parent = this.getParentCategory();
+    while (parent != null) {
+        parentCategories.add(parent);
+        parent = parent.getParentCategory();
+    }
+    return parentCategories;
+}
+
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(description, label, parameterItems, parentCategory);
