@@ -1,6 +1,8 @@
 package com.iloo.params.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -98,16 +100,20 @@ public class ParameterCategory {
 		return parentCategory == null;
 	}
 
-public List<ParameterCategory> getAllParentCategories() {
-    List<ParameterCategory> parentCategories = new ArrayList<>();
-    ParameterCategory parent = parentCategory;
-    while (parent != null) {
-        parentCategories.add(parent);
-        parent = parent.getParentCategory();
-    }
-    return parentCategories;
-}
-
+	/**
+	 * Returns a list of parent categories
+	 *
+	 * @return list of parent categories
+	 */
+	public List<ParameterCategory> getAllParentCategories() {
+		List<ParameterCategory> parentCategories = new ArrayList<>();
+		ParameterCategory parent = parentCategory;
+		while (parent != null) {
+			parentCategories.add(parent);
+			parent = parent.getParentCategory();
+		}
+		return parentCategories;
+	}
 
 	@Override
 	public int hashCode() {
