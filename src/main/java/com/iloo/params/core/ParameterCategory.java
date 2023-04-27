@@ -100,7 +100,7 @@ public class ParameterCategory {
 
 public List<ParameterCategory> getAllParentCategories() {
     List<ParameterCategory> parentCategories = new ArrayList<>();
-    ParameterCategory parent = this.getParentCategory();
+    ParameterCategory parent = parentCategory;
     while (parent != null) {
         parentCategories.add(parent);
         parent = parent.getParentCategory();
