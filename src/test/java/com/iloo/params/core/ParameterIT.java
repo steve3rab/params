@@ -1,9 +1,12 @@
 package com.iloo.params.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -69,8 +72,8 @@ public class ParameterIT {
 		ParameterCategory category3 = factory.createParameterCategory(label3, description3);
 
 		ParameterItem<String> item1 = factory.createParameterItem("Item 1", "Value 1", true);
-		ParameterItem<String> item2 = factory.createParameterItem("Item 2", "Value 2", true);
-		ParameterItem<String> item3 = factory.createParameterItem("Item 3", "Value 3", true);
+		ParameterItem<Integer> item2 = factory.createParameterItem("Item 2", 2, true);
+		ParameterItem<Date> item3 = factory.createParameterItem("Item 3", Date.valueOf(LocalDate.now()), true);
 
 		category1.addParameterItem(item1);
 		category2.addParameterItem(item2);
@@ -95,6 +98,20 @@ public class ParameterIT {
 
 		assertThrows(IllegalArgumentException.class, () -> category1.addParameterItem(item1));
 		assertThrows(NullPointerException.class, () -> category1.addParameterItem(null));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "Label 1, Description 1", "Label 2, Description 2", "Label 3, Description 3" })
+	@DisplayName("Test a category structure")
+	void testAddParameterCategoryStrcture(String label, String description) {
+		ParameterCategory category1 = factory.createParameterCategory(label, description);
+		ParameterCategory category2 = factory.createParameterCategory("Label", "Description");
+		category2.setParentCategory(category1);
+
+		assertTrue(category1.isRoot());
+		assertFalse(category2.isRoot());
+		assertTrue(category1.getAllParentCategories().isEmpty());
+		assertTrue(category2.getAllParentCategories().contains(category1));
 	}
 
 }

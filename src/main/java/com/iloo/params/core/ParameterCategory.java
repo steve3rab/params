@@ -116,7 +116,7 @@ public class ParameterCategory {
 		return Stream
 				.iterate(getParentCategory(),
 						parentCategory -> parentCategory.flatMap(ParameterCategory::getParentCategory))
-				.takeWhile(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+				.takeWhile(Optional::isPresent).map(Optional::get).collect(Collectors.toUnmodifiableList());
 	}
 
 	@Override
