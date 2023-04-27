@@ -12,8 +12,7 @@ public class ParameterFactory extends AParameterFactory {
 	}
 
 	@Override
-	public <T> ParameterItem<T> createParameterItem(String label, T value, ParameterCategory parameterCategory,
-			boolean active) {
-		return new ParameterItem<>(label, value, parameterCategory, active);
+	public <T> ParameterItem<T> createParameterItem(String label, T value, boolean active) {
+		return new ParameterItem<>(label, value, active);
 	}
 }

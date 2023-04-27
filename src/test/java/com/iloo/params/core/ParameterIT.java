@@ -1,7 +1,6 @@
 package com.iloo.params.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,7 +28,7 @@ public class ParameterIT {
 		assertEquals(label, category.getLabel());
 		assertEquals(description, category.getDescription());
 		assertTrue(category.getParameterItems().isEmpty());
-		assertNull(category.getParentCategory());
+		assertTrue(category.getParentCategory().isEmpty());
 		assertTrue(category.isRoot());
 		assertTrue(category.getAllParentCategories().isEmpty());
 	}
@@ -40,10 +39,10 @@ public class ParameterIT {
 	@DisplayName("Test a parameter item")
 	void testParameterItem(String label, String value, String categoryLabel, boolean active) {
 		ParameterCategory category = factory.createParameterCategory(categoryLabel, "Test category");
-		ParameterItem<String> item = factory.createParameterItem(label, value, category, active);
+		ParameterItem<String> item = factory.createParameterItem(label, value, active);
+		category.addParameterItem(item);
 		assertEquals(label, item.getLabel());
 		assertEquals(value, item.getValue());
-		assertEquals(category, item.getCategory());
 		assertEquals(active, item.isActive());
 	}
 
@@ -52,10 +51,8 @@ public class ParameterIT {
 	@DisplayName("Test adding parameter items to a category")
 	void testAddParameterItem(String label, Object value, boolean active) {
 		ParameterCategory category = factory.createParameterCategory("Label 1", "Description 1");
-		ParameterItem<Object> item = factory.createParameterItem(label, value, category, active);
-
+		ParameterItem<Object> item = factory.createParameterItem(label, value, active);
 		category.addParameterItem(item);
-
 		assertEquals(1, category.getParameterItems().size());
 		assertTrue(category.getParameterItems().containsKey(label));
 	}
@@ -71,9 +68,9 @@ public class ParameterIT {
 		ParameterCategory category2 = factory.createParameterCategory(label2, description2);
 		ParameterCategory category3 = factory.createParameterCategory(label3, description3);
 
-		ParameterItem<String> item1 = factory.createParameterItem("Item 1", "Value 1", category1, true);
-		ParameterItem<String> item2 = factory.createParameterItem("Item 2", "Value 2", category2, true);
-		ParameterItem<String> item3 = factory.createParameterItem("Item 3", "Value 3", category3, true);
+		ParameterItem<String> item1 = factory.createParameterItem("Item 1", "Value 1", true);
+		ParameterItem<String> item2 = factory.createParameterItem("Item 2", "Value 2", true);
+		ParameterItem<String> item3 = factory.createParameterItem("Item 3", "Value 3", true);
 
 		category1.addParameterItem(item1);
 		category2.addParameterItem(item2);
@@ -85,15 +82,16 @@ public class ParameterIT {
 
 		assertTrue(items1.containsKey(item1.getLabel()));
 		assertEquals(item1, items1.get(item1.getLabel()));
-		assertEquals(category1, item1.getCategory());
 
 		assertTrue(items2.containsKey(item2.getLabel()));
 		assertEquals(item2, items2.get(item2.getLabel()));
-		assertEquals(category2, item2.getCategory());
 
 		assertTrue(items3.containsKey(item3.getLabel()));
 		assertEquals(item3, items3.get(item3.getLabel()));
-		assertEquals(category3, item3.getCategory());
+
+		assertTrue(category1.isRoot());
+		assertTrue(category2.isRoot());
+		assertTrue(category3.isRoot());
 
 		assertThrows(IllegalArgumentException.class, () -> category1.addParameterItem(item1));
 		assertThrows(NullPointerException.class, () -> category1.addParameterItem(null));

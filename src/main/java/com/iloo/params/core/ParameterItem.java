@@ -2,6 +2,8 @@ package com.iloo.params.core;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Represents an item in a {@link ParameterCategory}.
  *
@@ -10,23 +12,19 @@ import java.util.Objects;
 public class ParameterItem<T> {
 	private final String label;
 	private final T value;
-	private final ParameterCategory parameterCategory;
 	private boolean active;
 
 	/**
 	 * Creates a new parameter item with the given label, value, category, and
 	 * active status.
 	 *
-	 * @param label             the label for this item.
-	 * @param value             the value for this item.
-	 * @param parameterCategory the category to which this item belongs.
-	 * @param active            {@code true} if this item is active, {@code false}
-	 *                          otherwise.
+	 * @param label  the label for this item.
+	 * @param value  the value for this item.
+	 * @param active {@code true} if this item is active, {@code false} otherwise.
 	 */
-	ParameterItem(String label, T value, ParameterCategory parameterCategory, boolean active) {
+	ParameterItem(@NonNull String label, @NonNull T value, boolean active) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.value = Objects.requireNonNull(value, "Value cannot be null");
-		this.parameterCategory = Objects.requireNonNull(parameterCategory, "ParameterCategory cannot be null");
 		this.active = active;
 	}
 
@@ -49,15 +47,6 @@ public class ParameterItem<T> {
 	}
 
 	/**
-	 * Returns the category to which this item belongs.
-	 *
-	 * @return the category to which this item belongs.
-	 */
-	public ParameterCategory getCategory() {
-		return parameterCategory;
-	}
-
-	/**
 	 * Returns {@code true} if this item is active, {@code false} otherwise.
 	 *
 	 * @return {@code true} if this item is active, {@code false} otherwise.
@@ -77,7 +66,7 @@ public class ParameterItem<T> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(active, label, parameterCategory, value);
+		return Objects.hash(active, label, value);
 	}
 
 	@Override
@@ -92,8 +81,7 @@ public class ParameterItem<T> {
 			return false;
 		}
 		ParameterItem<?> other = (ParameterItem<?>) obj;
-		return (active == other.active) && Objects.equals(label, other.label)
-				&& Objects.equals(parameterCategory, other.parameterCategory) && Objects.equals(value, other.value);
+		return (active == other.active) && Objects.equals(label, other.label) && Objects.equals(value, other.value);
 	}
 
 }

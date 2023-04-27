@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Represents a category of parameters.
@@ -15,7 +18,7 @@ public class ParameterCategory {
 	private final String label;
 	private final String description;
 	private final Map<String, ParameterItem<?>> parameterItems;
-	private ParameterCategory parentCategory;
+	private Optional<ParameterCategory> parentCategory = Optional.empty();
 
 	/**
 	 * Creates a new parameter category with the given label and description.
@@ -23,10 +26,26 @@ public class ParameterCategory {
 	 * @param label       the label for this category.
 	 * @param description the description for this category.
 	 */
-	ParameterCategory(String label, String description) {
+	ParameterCategory(@NonNull String label, @NonNull String description) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.description = Objects.requireNonNull(description, "Description cannot be null");
 		parameterItems = new HashMap<>();
+	}
+
+	/**
+	 * Adds a parameter item to this category.
+	 *
+	 * @param parameterItem the parameter item to put.
+	 * @throws NullPointerException if the parameter item is {@code null}.
+	 */
+	public void addParameterItem(@NonNull ParameterItem<?> parameterItem) {
+		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
+
+		parameterItems.computeIfPresent(parameterItem.getLabel(), (label, existingItem) -> {
+			throw new IllegalArgumentException("Parameter item already exists in the category");
+		});
+
+		parameterItems.put(parameterItem.getLabel(), parameterItem);
 	}
 
 	/**
@@ -57,30 +76,13 @@ public class ParameterCategory {
 	}
 
 	/**
-	 * Adds a parameter item to this category.
+	 * Returns the optional parent category of this category, or
+	 * {@code Optional#empty()} if this category has no parent.
 	 *
-	 * @param parameterItem the parameter item to put.
-	 * @throws NullPointerException if the parameter item is {@code null}.
+	 * @return the optional parent category of this category, or
+	 *         {@code Optional#empty()} if this category has no parent.
 	 */
-	public void addParameterItem(ParameterItem<?> parameterItem) {
-		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
-
-		parameterItems.computeIfPresent(parameterItem.getLabel(), (label, existingItem) -> {
-			throw new IllegalArgumentException("Parameter item already exists in the category");
-		});
-
-		parameterItems.put(parameterItem.getLabel(), parameterItem);
-		parameterItem.getCategory().setParentCategory(this);
-	}
-
-	/**
-	 * Returns the parent category of this category, or {@code null} if this
-	 * category has no parent.
-	 *
-	 * @return the parent category of this category, or {@code null} if this
-	 *         category has no parent.
-	 */
-	public ParameterCategory getParentCategory() {
+	public Optional<ParameterCategory> getParentCategory() {
 		return parentCategory;
 	}
 
@@ -89,8 +91,9 @@ public class ParameterCategory {
 	 *
 	 * @param parentCategory the parent category of this category.
 	 */
-	public void setParentCategory(ParameterCategory parentCategory) {
-		this.parentCategory = parentCategory;
+	public void setParentCategory(@NonNull ParameterCategory parentCategory) {
+		Objects.requireNonNull(parentCategory, "Parameter category cannot be null");
+		this.parentCategory = Optional.of(parentCategory);
 	}
 
 	/**
@@ -101,7 +104,7 @@ public class ParameterCategory {
 	 *         otherwise.
 	 */
 	public boolean isRoot() {
-		return parentCategory == null;
+		return parentCategory.isEmpty();
 	}
 
 	/**
@@ -110,8 +113,10 @@ public class ParameterCategory {
 	 * @return list of parent categories
 	 */
 	public List<ParameterCategory> getAllParentCategories() {
-		return Stream.iterate(getParentCategory(), Objects::nonNull, ParameterCategory::getParentCategory)
-				.collect(Collectors.toList());
+		return Stream
+				.iterate(getParentCategory(),
+						parentCategory -> parentCategory.flatMap(ParameterCategory::getParentCategory))
+				.takeWhile(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
 	}
 
 	@Override
