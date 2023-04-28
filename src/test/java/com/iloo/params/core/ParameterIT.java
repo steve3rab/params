@@ -2,9 +2,13 @@ package com.iloo.params.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +41,7 @@ public class ParameterIT {
 		assertTrue(category.getAllParentCategories().isEmpty());
 	}
 
-	@ParameterizedTest(name = "Creating parameter item with label ''{0}'' and value ''{1}''")
+	@ParameterizedTest(name = "Creating parameter item with label ''{0}'' , value ''{1}'' , active ''{3}''")
 	@CsvSource({ "Label 1, Value 1, Label 2, false" })
 	@DisplayName("Test a parameter item")
 	void testParameterItem(String label, String value, String categoryLabel, boolean active) {
@@ -47,6 +51,24 @@ public class ParameterIT {
 		assertEquals(label, item.getLabel());
 		assertEquals(value, item.getValue());
 		assertEquals(active, item.isActive());
+	}
+
+	@ParameterizedTest(name = "Creating parameter item with label ''{0}'' and active ''{2}''")
+	@CsvSource({ "Label 1, false" })
+	@DisplayName("Test a parameter item")
+	void testParameterItemValueType(String label, boolean active) {
+		String valueStr = "Value";
+		ParameterItem<String> item1 = factory.createParameterItem(label, valueStr, active);
+		assertEquals(label, item1.getLabel());
+		assertEquals(valueStr, item1.getValue());
+		assertFalse(item1.isActive());
+
+		assertThrows(InvalidParameterItemException.class,
+				() -> factory.createParameterItem(label, new File(valueStr), active));
+
+		int valueInt = 2;
+		ParameterItem<Integer> item2 = factory.createParameterItem(label, valueInt, active);
+		assertSame(valueInt, item2.getValue());
 	}
 
 	@ParameterizedTest(name = "Adding parameter item with label ''{0}'' and value ''{1}''")
@@ -74,6 +96,9 @@ public class ParameterIT {
 		ParameterItem<Integer> item2 = factory.createParameterItem("Item 2", 2, true);
 		ParameterItem<Date> item3 = factory.createParameterItem("Item 3", Date.valueOf(LocalDate.now()), true);
 
+		assertNotEquals(category1, category2);
+		assertNotSame(category1, category2);
+
 		category1.addParameterItem(item1);
 		category2.addParameterItem(item2);
 		category3.addParameterItem(item3);
@@ -95,7 +120,7 @@ public class ParameterIT {
 		assertTrue(category2.isRoot());
 		assertTrue(category3.isRoot());
 
-		assertThrows(IllegalArgumentException.class, () -> category1.addParameterItem(item1));
+		assertThrows(InvalidParameterCategoryException.class, () -> category1.addParameterItem(item1));
 		assertThrows(NullPointerException.class, () -> category1.addParameterItem(null));
 	}
 
@@ -129,7 +154,11 @@ public class ParameterIT {
 		category3.setParentCategory(category2);
 
 		ParameterCategory category4 = factory.createParameterCategory("Label_category4", "Description_category4");
-		assertThrows(InvalidParameterCategoryException.class, () -> category4.setParentCategory(category4));
+		InvalidParameterCategoryException circularException = assertThrows(InvalidParameterCategoryException.class,
+				() -> category4.setParentCategory(category4));
+		String expectedMessage = "Circular dependency detected for parameter";
+		String actualMessage = circularException.getMessage();
+		assertEquals(expectedMessage, actualMessage);
 
 		ParameterCategory category5 = factory.createParameterCategory(label, description);
 		assertThrows(InvalidParameterCategoryException.class, () -> category5.setParentCategory(category3));

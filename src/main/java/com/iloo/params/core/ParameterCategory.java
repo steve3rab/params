@@ -25,6 +25,7 @@ public class ParameterCategory {
 	 *
 	 * @param label       the label for this category.
 	 * @param description the description for this category.
+	 * @throws NullPointerException if the label or description {@code null}.
 	 */
 	ParameterCategory(@NonNull String label, @NonNull String description) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
@@ -42,7 +43,8 @@ public class ParameterCategory {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
 		parameterItems.computeIfPresent(parameterItem.getLabel(), (label, existingItem) -> {
-			throw new IllegalArgumentException("Parameter item already exists in the category");
+			throw InvalidParameterCategoryException.forInvalidParameterItem(parameterItem,
+					"Parameter item already exists in the category");
 		});
 
 		parameterItems.put(parameterItem.getLabel(), parameterItem);
@@ -90,6 +92,7 @@ public class ParameterCategory {
 	 * Sets the parent category of this category.
 	 *
 	 * @param parentCategory the parent category of this category.
+	 * @throws NullPointerException if {@link ParameterCategory} is {@code null}.
 	 */
 	public void setParentCategory(@NonNull ParameterCategory parentCategory) {
 		Objects.requireNonNull(parentCategory, "Parameter category cannot be null");

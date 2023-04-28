@@ -8,8 +8,7 @@ public class InvalidParameterCategoryException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructs a new exception with the specified detail message and parameter
-	 * label.
+	 * Constructs a new exception with the specified detail message.
 	 *
 	 * @param message the detail message (which is saved for later retrieval by the
 	 *                getMessage() method).
@@ -22,8 +21,8 @@ public class InvalidParameterCategoryException extends RuntimeException {
 	 * Constructs an exception indicating that a circular dependency was detected
 	 * for a parameter with the specified label.
 	 *
-	 * @return an InvalidParameterCategoryException with a message indicating a circular
-	 *         dependency.
+	 * @return an InvalidParameterCategoryException with a message indicating a
+	 *         circular dependency.
 	 */
 	public static InvalidParameterCategoryException forCircularDependency() {
 		return new InvalidParameterCategoryException("Circular dependency detected for parameter");
@@ -35,10 +34,25 @@ public class InvalidParameterCategoryException extends RuntimeException {
 	 *
 	 * @param parameterLabel the label of the parameter with the invalid value.
 	 * @param message        a detailed message describing the invalid value.
-	 * @return an InvalidParameterCategoryException with a message indicating an invalid
-	 *         value.
+	 * @return an InvalidParameterCategoryException with a message indicating an
+	 *         invalid value.
 	 */
 	public static InvalidParameterCategoryException forInvalidLabelValue(String parameterLabel, String message) {
-		return new InvalidParameterCategoryException("Invalid value for parameter '" + parameterLabel + "': " + message);
+		return new InvalidParameterCategoryException(
+				"Invalid value for parameter '" + parameterLabel + "': " + message);
+	}
+
+	/**
+	 * Constructs an exception indicating that the specified {@link ParameterItem}
+	 * is invalid.
+	 *
+	 * @param parameterItem the parameter item.
+	 * @param message       a detailed message describing the invalid value.
+	 * @return an InvalidParameterCategoryException with a message indicating an
+	 *         invalid value.
+	 */
+	public static InvalidParameterCategoryException forInvalidParameterItem(ParameterItem<?> parameterItem,
+			String message) {
+		return new InvalidParameterCategoryException("Invalid value for parameter '" + parameterItem + "': " + message);
 	}
 }
