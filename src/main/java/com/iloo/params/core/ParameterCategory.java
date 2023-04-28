@@ -93,6 +93,23 @@ public class ParameterCategory {
 	 */
 	public void setParentCategory(@NonNull ParameterCategory parentCategory) {
 		Objects.requireNonNull(parentCategory, "Parameter category cannot be null");
+
+		// Check if it takes itself as parent
+		if (parentCategory == this) {
+			throw InvalidParameterCategoryException.forCircularDependency();
+		}
+
+		// Check if the parent category has the same label as any of this category's
+		// ancestors
+		ParameterCategory ancestor = parentCategory;
+		while (ancestor != null) {
+			if (label.equals(ancestor.getLabel())) {
+				throw InvalidParameterCategoryException.forInvalidLabelValue(label,
+						"Child category cannot have the same label as any of its parent categories");
+			}
+			ancestor = ancestor.parentCategory.orElse(null);
+		}
+
 		this.parentCategory = Optional.of(parentCategory);
 	}
 

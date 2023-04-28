@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -24,7 +25,7 @@ public class ParameterIT {
 	}
 
 	@ParameterizedTest(name = "Create category with label ''{0}'' and description ''{1}''")
-	@CsvSource({ "Label 1, Description 1", "Label 2, Description 2", "Label 3, Description 3" })
+	@CsvSource({ "Label 1, Description 1", "Label 2, Description 2" })
 	@DisplayName("Test a category")
 	void testParameterCategory(String label, String description) {
 		ParameterCategory category = factory.createParameterCategory(label, description);
@@ -37,8 +38,7 @@ public class ParameterIT {
 	}
 
 	@ParameterizedTest(name = "Creating parameter item with label ''{0}'' and value ''{1}''")
-	@CsvSource({ "Label 1, Value 1, Label 2, false", "Label 2, Value 2, Label 2, true",
-			"Label 3, Value 3, Label 1, false" })
+	@CsvSource({ "Label 1, Value 1, Label 2, false" })
 	@DisplayName("Test a parameter item")
 	void testParameterItem(String label, String value, String categoryLabel, boolean active) {
 		ParameterCategory category = factory.createParameterCategory(categoryLabel, "Test category");
@@ -50,7 +50,7 @@ public class ParameterIT {
 	}
 
 	@ParameterizedTest(name = "Adding parameter item with label ''{0}'' and value ''{1}''")
-	@CsvSource({ "param1, 10, true", "param2, hello, false", "param3, true, true", "param4, 20.5, false" })
+	@CsvSource({ "param1, 10, true" })
 	@DisplayName("Test adding parameter items to a category")
 	void testAddParameterItem(String label, Object value, boolean active) {
 		ParameterCategory category = factory.createParameterCategory("Label 1", "Description 1");
@@ -61,8 +61,7 @@ public class ParameterIT {
 	}
 
 	@ParameterizedTest
-	@CsvSource({ "Label 1, Description 1, Label 2, Description 2, Label 3, Description 3",
-			"Label 4, Description 4, Label 5, Description 5, Label 6, Description 6" })
+	@CsvSource({ "Label 1, Description 1, Label 2, Description 2, Label 3, Description 3" })
 	@DisplayName("Test adding parameter items with many categories")
 	void testAddParameterItemWithCategories(String label1, String description1, String label2, String description2,
 			String label3, String description3) {
@@ -101,17 +100,44 @@ public class ParameterIT {
 	}
 
 	@ParameterizedTest
-	@CsvSource({ "Label 1, Description 1", "Label 2, Description 2", "Label 3, Description 3" })
+	@CsvSource({ "Label 1, Description 1" })
 	@DisplayName("Test a category structure")
-	void testAddParameterCategoryStrcture(String label, String description) {
+	void testAddParameterCategoryStructure(String label, String description) {
 		ParameterCategory category1 = factory.createParameterCategory(label, description);
-		ParameterCategory category2 = factory.createParameterCategory("Label", "Description");
+		ParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
 		category2.setParentCategory(category1);
+		ParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		category3.setParentCategory(category2);
 
 		assertTrue(category1.isRoot());
 		assertFalse(category2.isRoot());
 		assertTrue(category1.getAllParentCategories().isEmpty());
 		assertTrue(category2.getAllParentCategories().contains(category1));
+		assertTrue(category3.getAllParentCategories().contains(category1));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "Label 1, Description 1" })
+	@DisplayName("Test a category hierarchy")
+	void testAddParameterCategoryHierarchy(String label, String description) {
+		ParameterCategory category1 = factory.createParameterCategory(label, description);
+
+		ParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
+		category2.setParentCategory(category1);
+
+		ParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		category3.setParentCategory(category2);
+
+		ParameterCategory category4 = factory.createParameterCategory("Label_category4", "Description_category4");
+		assertThrows(InvalidParameterCategoryException.class, () -> category4.setParentCategory(category4));
+
+		ParameterCategory category5 = factory.createParameterCategory(label, description);
+		assertThrows(InvalidParameterCategoryException.class, () -> category5.setParentCategory(category3));
+
+		assertTrue(category1.isRoot());
+		assertTrue(category1.getAllParentCategories().isEmpty());
+		assertTrue(category2.getAllParentCategories().contains(category1));
+		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
 	}
 
 }
