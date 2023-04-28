@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.iloo.params.exceptions.InvalidParameterItemException;
+
 /**
  * Represents an item in a {@link ParameterCategory}.
  *

@@ -1,15 +1,17 @@
 package com.iloo.params.core;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
+
+import com.iloo.params.exceptions.InvalidParameterCategoryException;
 
 /**
  * Represents a category of parameters.
@@ -30,7 +32,7 @@ public class ParameterCategory {
 	ParameterCategory(@NonNull String label, @NonNull String description) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.description = Objects.requireNonNull(description, "Description cannot be null");
-		parameterItems = new HashMap<>();
+		parameterItems = new ConcurrentHashMap<>();
 	}
 
 	/**
@@ -39,7 +41,7 @@ public class ParameterCategory {
 	 * @param parameterItem the parameter item to put.
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
-	public void addParameterItem(@NonNull ParameterItem<?> parameterItem) {
+	public synchronized void addParameterItem(@NonNull ParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
 		parameterItems.computeIfPresent(parameterItem.getLabel(), (label, existingItem) -> {
@@ -48,6 +50,17 @@ public class ParameterCategory {
 		});
 
 		parameterItems.put(parameterItem.getLabel(), parameterItem);
+	}
+
+	/**
+	 * Remove a parameter item to this category.
+	 *
+	 * @param parameterItem the parameter item to put.
+	 * @throws NullPointerException if the parameter item is {@code null}.
+	 */
+	public synchronized void removeParameterItem(@NonNull ParameterItem<?> parameterItem) {
+		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
+		parameterItems.remove(parameterItem.getLabel(), parameterItem);
 	}
 
 	/**

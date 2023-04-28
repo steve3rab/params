@@ -19,6 +19,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import com.iloo.params.exceptions.InvalidParameterCategoryException;
+import com.iloo.params.exceptions.InvalidParameterItemException;
+
 public class ParameterIT {
 
 	private static AParameterFactory factory;
@@ -71,15 +74,17 @@ public class ParameterIT {
 		assertSame(valueInt, item2.getValue());
 	}
 
-	@ParameterizedTest(name = "Adding parameter item with label ''{0}'' and value ''{1}''")
+	@ParameterizedTest(name = "Adding and removing parameter item with label ''{0}'' and value ''{1}''")
 	@CsvSource({ "param1, 10, true" })
-	@DisplayName("Test adding parameter items to a category")
-	void testAddParameterItem(String label, Object value, boolean active) {
+	@DisplayName("Test adding and removing parameter items to a category")
+	void testAddRemoveParameterItem(String label, Object value, boolean active) {
 		ParameterCategory category = factory.createParameterCategory("Label 1", "Description 1");
 		ParameterItem<Object> item = factory.createParameterItem(label, value, active);
 		category.addParameterItem(item);
 		assertEquals(1, category.getParameterItems().size());
 		assertTrue(category.getParameterItems().containsKey(label));
+		category.removeParameterItem(item);
+		assertTrue(category.getParameterItems().isEmpty());
 	}
 
 	@ParameterizedTest

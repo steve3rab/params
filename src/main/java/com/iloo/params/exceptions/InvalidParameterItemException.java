@@ -1,4 +1,4 @@
-package com.iloo.params.core;
+package com.iloo.params.exceptions;
 
 public class InvalidParameterItemException extends RuntimeException {
 

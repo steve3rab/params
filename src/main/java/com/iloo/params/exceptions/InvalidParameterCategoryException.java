@@ -1,4 +1,6 @@
-package com.iloo.params.core;
+package com.iloo.params.exceptions;
+
+import com.iloo.params.core.ParameterItem;
 
 /**
  * Exception thrown when a parameter is invalid or has a conflict.
