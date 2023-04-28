@@ -29,8 +29,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Clean, Build, and Test
-      run: mvn clean test
+    - name: Clean and Build
+      run: mvn clean install -DskipTests
+      
+    - name: Project Test
+      run: mvn test -Dtest=ParameterIT
       
     - name: Build with Maven
       run: mvn -B package --file pom.xml
