@@ -9,15 +9,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.iloo.params.exceptions.InvalidParameterItemException;
 
 /**
- * Represents an item in a {@link ParameterCategory}.
+ * Represents a parameter item with a label, value, and active status.
  *
- * @param <T> the type of the value stored in this item.
+ * @param <T> the type of the value for this parameter item.
  */
-public class ParameterItem<T> {
-	private final String label;
-	private final T value;
-	private boolean active;
-
+public record ParameterItem<T>(@NonNull String label, @NonNull T value, boolean active) {
 	/**
 	 * Creates a new parameter item with the given label, value, category, and
 	 * active status.
@@ -29,7 +25,7 @@ public class ParameterItem<T> {
 	 * @throws InvalidParameterItemException if the value is not of type String,
 	 *                                       Number, Date, or Path.
 	 */
-	ParameterItem(@NonNull String label, @NonNull T value, boolean active) {
+	public ParameterItem(@NonNull String label, @NonNull T value, boolean active) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.value = validateValueType(Objects.requireNonNull(value, "Value cannot be null"));
 		this.active = active;
@@ -53,59 +49,15 @@ public class ParameterItem<T> {
 	}
 
 	/**
-	 * Returns the label for this item.
+	 * Returns a new {@code ParameterItem} with the same label and value as this
+	 * item, but with the given active status.
 	 *
-	 * @return the label for this item.
+	 * @param active {@code true} if the new item should be active, {@code false}
+	 *               otherwise.
+	 * @return a new {@code ParameterItem} with the same label and value as this
+	 *         item, but with the given active status.
 	 */
-	public String getLabel() {
-		return label;
+	public ParameterItem<T> withActive(boolean active) {
+		return new ParameterItem<>(label, value, active);
 	}
-
-	/**
-	 * Returns the value for this item.
-	 *
-	 * @return the value for this item.
-	 */
-	public T getValue() {
-		return value;
-	}
-
-	/**
-	 * Returns {@code true} if this item is active, {@code false} otherwise.
-	 *
-	 * @return {@code true} if this item is active, {@code false} otherwise.
-	 */
-	public boolean isActive() {
-		return active;
-	}
-
-	/**
-	 * Sets the active status of this item.
-	 *
-	 * @param active {@code true} if this item is active, {@code false} otherwise.
-	 */
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(active, label, value);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		ParameterItem<?> other = (ParameterItem<?>) obj;
-		return (active == other.active) && Objects.equals(label, other.label) && Objects.equals(value, other.value);
-	}
-
 }

@@ -43,12 +43,12 @@ public class ParameterCategory {
 	public synchronized void addParameterItem(@NonNull ParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
-		parameterItems.computeIfPresent(parameterItem.getLabel(), (lbl, existingItem) -> {
+		parameterItems.computeIfPresent(parameterItem.label(), (lbl, existingItem) -> {
 			throw InvalidParameterCategoryException.forInvalidParameterItem(parameterItem,
 					"Parameter item already exists in the category");
 		});
 
-		parameterItems.put(parameterItem.getLabel(), parameterItem);
+		parameterItems.put(parameterItem.label(), parameterItem);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class ParameterCategory {
 	 */
 	public synchronized void removeParameterItem(@NonNull ParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
-		parameterItems.remove(parameterItem.getLabel(), parameterItem);
+		parameterItems.remove(parameterItem.label(), parameterItem);
 	}
 
 	/**

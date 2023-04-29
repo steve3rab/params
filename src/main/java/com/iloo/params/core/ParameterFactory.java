@@ -4,7 +4,7 @@ package com.iloo.params.core;
  * Concrete implementation of IParameterFactory that creates instances of
  * ParameterCategory and ParameterItem using their default constructors.
  */
-public class ParameterFactory implements IParameterFactory {
+public final class ParameterFactory implements IParameterFactory {
 
 	@Override
 	public ParameterCategory createParameterCategory(String label, String description) {

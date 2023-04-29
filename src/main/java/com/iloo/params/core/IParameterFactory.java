@@ -3,7 +3,7 @@ package com.iloo.params.core;
 /**
  * Abstract factory for creating parameter categories and items.
  */
-public interface IParameterFactory {
+public sealed interface IParameterFactory permits ParameterFactory {
 	/**
 	 * Creates a new parameter category with the given label and description.
 	 *
