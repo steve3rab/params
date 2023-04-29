@@ -1,11 +1,13 @@
 package com.iloo.params.core;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -147,6 +149,21 @@ public class ParameterCategory {
 	public List<ParameterCategory> getAllParentCategories() {
 		return Stream.iterate(getParentCategory(), parentCgy -> parentCgy.flatMap(ParameterCategory::getParentCategory))
 				.takeWhile(Optional::isPresent).map(Optional::get).toList();
+	}
+
+	/**
+	 * Returns a map of all parameter items in this category and its parent
+	 * categories.
+	 *
+	 * @return a map of all parameter items in this category and its parent
+	 *         categories.
+	 */
+	public Map<String, ParameterItem<?>> getAllParentParameterItems() {
+		Map<String, ParameterItem<?>> allParameterItems = new HashMap<>();
+		parentCategory.ifPresent(parent -> allParameterItems.putAll(parent.getAllParentParameterItems()));
+		allParameterItems.putAll(parameterItems);
+		return allParameterItems.entrySet().stream().collect(
+				Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue, (existingItem, newItem) -> newItem));
 	}
 
 	@Override

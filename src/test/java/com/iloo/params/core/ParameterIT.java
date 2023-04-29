@@ -175,4 +175,27 @@ class ParameterIT {
 		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
 	}
 
+	@ParameterizedTest
+	@CsvSource({ "Label 1, Description 1" })
+	@DisplayName("Test a category parameter hierarchy")
+	void testParameterItemCategoryHierarchy(String label, String description) {
+		ParameterCategory category1 = factory.createParameterCategory(label, description);
+		category1.addParameterItem(factory.createParameterItem("Label_parameter1", "Value_parameter1", false));
+		category1.addParameterItem(factory.createParameterItem("Label_parameter2", "Value_parameter2", false));
+		category1.addParameterItem(factory.createParameterItem("Label_parameter3", "Value_parameter3", false));
+
+		ParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
+		category2.addParameterItem(factory.createParameterItem("Label_parameter4", "Value_parameter4", false));
+		category2.setParentCategory(category1);
+
+		ParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		category3.addParameterItem(factory.createParameterItem("Label_parameter1", "Value_parameter6", false));
+		category3.addParameterItem(factory.createParameterItem("Label_parameter5", "Value_parameter5", false));
+		category3.setParentCategory(category2);
+
+		Map<String, ParameterItem<?>> parameters = category3.getAllParentParameterItems();
+		assertSame(5, parameters.size());
+		assertEquals("Value_parameter6", String.valueOf(parameters.get("Label_parameter1").getValue()));
+	}
+
 }
