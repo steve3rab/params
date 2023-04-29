@@ -30,10 +30,14 @@ jobs:
         cache: maven
         
     - name: Clean and Build
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
       run: mvn clean install -DskipTests
       
     - name: Project Test
-      run: mvn test -Dtest=com.iloo.params.core.ParameterIT
+      run: mvn test -Dtest=*IT
       
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package -DskipTests -Pprod --file pom.xml
