@@ -30,10 +30,6 @@ jobs:
         cache: maven
         
     - name: Clean and Build
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
       run: mvn clean install -DskipTests
       
     - name: Project Test
