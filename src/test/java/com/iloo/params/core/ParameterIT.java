@@ -35,7 +35,7 @@ class ParameterIT {
 	@CsvSource({ "Label 1, Description 1", "Label 2, Description 2" })
 	@DisplayName("Test a category")
 	void testParameterCategory(String label, String description) {
-		ParameterCategory category = factory.createParameterCategory(label, description);
+		IParameterCategory category = factory.createParameterCategory(label, description);
 		assertEquals(label, category.getLabel());
 		assertEquals(description, category.getDescription());
 		assertTrue(category.getParameterItems().isEmpty());
@@ -48,8 +48,8 @@ class ParameterIT {
 	@CsvSource({ "Label 1, Value 1, Label 2, false" })
 	@DisplayName("Test a parameter item")
 	void testParameterItem(String label, String value, String categoryLabel, boolean active) {
-		ParameterCategory category = factory.createParameterCategory(categoryLabel, "Test category");
-		ParameterItem<String> item = factory.createParameterItem(label, value, active);
+		IParameterCategory category = factory.createParameterCategory(categoryLabel, "Test category");
+		IParameterItem<String> item = factory.createParameterItem(label, value, active);
 		item.setActive(true);
 		category.addParameterItem(item);
 		assertEquals(label, item.getLabel());
@@ -62,7 +62,7 @@ class ParameterIT {
 	@DisplayName("Test a parameter item")
 	void testParameterItemValueType(String label, boolean active) {
 		String valueStr = "Value";
-		ParameterItem<String> item1 = factory.createParameterItem(label, valueStr, active);
+		IParameterItem<String> item1 = factory.createParameterItem(label, valueStr, active);
 		assertEquals(label, item1.getLabel());
 		assertEquals(valueStr, item1.getValue());
 		assertFalse(item1.isActive());
@@ -71,7 +71,7 @@ class ParameterIT {
 		assertThrows(InvalidParameterItemException.class, () -> factory.createParameterItem(label, valueFile, active));
 
 		int valueInt = 2;
-		ParameterItem<Integer> item2 = factory.createParameterItem(label, valueInt, active);
+		IParameterItem<Integer> item2 = factory.createParameterItem(label, valueInt, active);
 		assertSame(valueInt, item2.getValue());
 	}
 
@@ -79,8 +79,8 @@ class ParameterIT {
 	@CsvSource({ "param1, 10, true" })
 	@DisplayName("Test adding and removing parameter items to a category")
 	void testAddRemoveParameterItem(String label, Object value, boolean active) {
-		ParameterCategory category = factory.createParameterCategory("Label 1", "Description 1");
-		ParameterItem<Object> item = factory.createParameterItem(label, value, active);
+		IParameterCategory category = factory.createParameterCategory("Label 1", "Description 1");
+		IParameterItem<Object> item = factory.createParameterItem(label, value, active);
 		category.addParameterItem(item);
 		assertEquals(1, category.getParameterItems().size());
 		assertTrue(category.getParameterItems().containsKey(label));
@@ -94,13 +94,13 @@ class ParameterIT {
 	void testAddParameterItemWithCategories(String label1, String description1, String label2, String description2,
 			String label3, String description3) {
 
-		ParameterCategory category1 = factory.createParameterCategory(label1, description1);
-		ParameterCategory category2 = factory.createParameterCategory(label2, description2);
-		ParameterCategory category3 = factory.createParameterCategory(label3, description3);
+		IParameterCategory category1 = factory.createParameterCategory(label1, description1);
+		IParameterCategory category2 = factory.createParameterCategory(label2, description2);
+		IParameterCategory category3 = factory.createParameterCategory(label3, description3);
 
-		ParameterItem<String> item1 = factory.createParameterItem("Item 1", "Value 1", true);
-		ParameterItem<Integer> item2 = factory.createParameterItem("Item 2", 2, true);
-		ParameterItem<Date> item3 = factory.createParameterItem("Item 3", Date.valueOf(LocalDate.now()), true);
+		IParameterItem<String> item1 = factory.createParameterItem("Item 1", "Value 1", true);
+		IParameterItem<Integer> item2 = factory.createParameterItem("Item 2", 2, true);
+		IParameterItem<Date> item3 = factory.createParameterItem("Item 3", Date.valueOf(LocalDate.now()), true);
 
 		assertNotEquals(category1, category2);
 		assertNotSame(category1, category2);
@@ -109,9 +109,9 @@ class ParameterIT {
 		category2.addParameterItem(item2);
 		category3.addParameterItem(item3);
 
-		Map<String, ParameterItem<?>> items1 = category1.getParameterItems();
-		Map<String, ParameterItem<?>> items2 = category2.getParameterItems();
-		Map<String, ParameterItem<?>> items3 = category3.getParameterItems();
+		Map<String, IParameterItem<?>> items1 = category1.getParameterItems();
+		Map<String, IParameterItem<?>> items2 = category2.getParameterItems();
+		Map<String, IParameterItem<?>> items3 = category3.getParameterItems();
 
 		assertTrue(items1.containsKey(item1.getLabel()));
 		assertEquals(item1, items1.get(item1.getLabel()));
@@ -134,10 +134,10 @@ class ParameterIT {
 	@CsvSource({ "Label 1, Description 1" })
 	@DisplayName("Test a category structure")
 	void testAddParameterCategoryStructure(String label, String description) {
-		ParameterCategory category1 = factory.createParameterCategory(label, description);
-		ParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
+		IParameterCategory category1 = factory.createParameterCategory(label, description);
+		IParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
 		category2.setParentCategory(category1);
-		ParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		IParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
 		category3.setParentCategory(category2);
 
 		assertTrue(category1.isRoot());
@@ -151,22 +151,22 @@ class ParameterIT {
 	@CsvSource({ "Label 1, Description 1" })
 	@DisplayName("Test a category hierarchy")
 	void testAddParameterCategoryHierarchy(String label, String description) {
-		ParameterCategory category1 = factory.createParameterCategory(label, description);
+		IParameterCategory category1 = factory.createParameterCategory(label, description);
 
-		ParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
+		IParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
 		category2.setParentCategory(category1);
 
-		ParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		IParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
 		category3.setParentCategory(category2);
 
-		ParameterCategory category4 = factory.createParameterCategory("Label_category4", "Description_category4");
+		IParameterCategory category4 = factory.createParameterCategory("Label_category4", "Description_category4");
 		InvalidParameterCategoryException circularException = assertThrows(InvalidParameterCategoryException.class,
 				() -> category4.setParentCategory(category4));
 		String expectedMessage = "Circular dependency detected for parameter";
 		String actualMessage = circularException.getMessage();
 		assertEquals(expectedMessage, actualMessage);
 
-		ParameterCategory category5 = factory.createParameterCategory(label, description);
+		IParameterCategory category5 = factory.createParameterCategory(label, description);
 		assertThrows(InvalidParameterCategoryException.class, () -> category5.setParentCategory(category3));
 
 		assertTrue(category1.isRoot());
@@ -179,21 +179,21 @@ class ParameterIT {
 	@CsvSource({ "Label 1, Description 1" })
 	@DisplayName("Test a category parameter hierarchy")
 	void testParameterItemCategoryHierarchy(String label, String description) {
-		ParameterCategory category1 = factory.createParameterCategory(label, description);
+		IParameterCategory category1 = factory.createParameterCategory(label, description);
 		category1.addParameterItem(factory.createParameterItem("Label_parameter1", "Value_parameter1", false));
 		category1.addParameterItem(factory.createParameterItem("Label_parameter2", "Value_parameter2", false));
 		category1.addParameterItem(factory.createParameterItem("Label_parameter3", "Value_parameter3", false));
 
-		ParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
+		IParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
 		category2.addParameterItem(factory.createParameterItem("Label_parameter4", "Value_parameter4", false));
 		category2.setParentCategory(category1);
 
-		ParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		IParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
 		category3.addParameterItem(factory.createParameterItem("Label_parameter1", "Value_parameter6", false));
 		category3.addParameterItem(factory.createParameterItem("Label_parameter5", "Value_parameter5", false));
 		category3.setParentCategory(category2);
 
-		Map<String, ParameterItem<?>> parameters = category3.getAllParentParameterItems();
+		Map<String, IParameterItem<?>> parameters = category3.getAllParentParameterItems();
 		assertSame(5, parameters.size());
 		assertEquals("Value_parameter6", String.valueOf(parameters.get("Label_parameter1").getValue()));
 	}

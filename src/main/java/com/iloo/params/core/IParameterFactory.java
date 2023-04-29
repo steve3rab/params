@@ -11,7 +11,7 @@ public sealed interface IParameterFactory permits ParameterFactory {
 	 * @param description the description for this category.
 	 * @return a new parameter category.
 	 */
-	ParameterCategory createParameterCategory(String label, String description);
+	IParameterCategory createParameterCategory(String label, String description);
 
 	/**
 	 * Creates a new parameter item with the given label, value, category, and
@@ -23,5 +23,5 @@ public sealed interface IParameterFactory permits ParameterFactory {
 	 * @param <T>    the type of the value stored in this item.
 	 * @return a new parameter item.
 	 */
-	<T> ParameterItem<T> createParameterItem(String label, T value, boolean active);
+	<T> IParameterItem<T> createParameterItem(String label, T value, boolean active);
 }

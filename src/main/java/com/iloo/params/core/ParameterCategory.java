@@ -17,11 +17,11 @@ import com.iloo.params.exceptions.InvalidParameterCategoryException;
 /**
  * Represents a category of parameters.
  */
-public class ParameterCategory {
+class ParameterCategory implements IParameterCategory {
 	private final String label;
 	private final String description;
-	private final Map<String, ParameterItem<?>> parameterItems;
-	private Optional<ParameterCategory> parentCategory = Optional.empty();
+	private final Map<String, IParameterItem<?>> parameterItems;
+	private Optional<IParameterCategory> parentCategory = Optional.empty();
 
 	/**
 	 * Creates a new parameter category with the given label and description.
@@ -42,7 +42,8 @@ public class ParameterCategory {
 	 * @param parameterItem the parameter item to put.
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
-	public synchronized void addParameterItem(@NonNull ParameterItem<?> parameterItem) {
+	@Override
+	public synchronized void addParameterItem(@NonNull IParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
 		parameterItems.computeIfPresent(parameterItem.getLabel(), (lbl, existingItem) -> {
@@ -59,7 +60,8 @@ public class ParameterCategory {
 	 * @param parameterItem the parameter item to put.
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
-	public synchronized void removeParameterItem(@NonNull ParameterItem<?> parameterItem) {
+	@Override
+	public synchronized void removeParameterItem(@NonNull IParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 		parameterItems.remove(parameterItem.getLabel(), parameterItem);
 	}
@@ -69,6 +71,7 @@ public class ParameterCategory {
 	 *
 	 * @return the label for this category.
 	 */
+	@Override
 	public String getLabel() {
 		return label;
 	}
@@ -78,6 +81,7 @@ public class ParameterCategory {
 	 *
 	 * @return the description for this category.
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -87,7 +91,8 @@ public class ParameterCategory {
 	 *
 	 * @return a map of the parameter items belonging to this category.
 	 */
-	public Map<String, ParameterItem<?>> getParameterItems() {
+	@Override
+	public Map<String, IParameterItem<?>> getParameterItems() {
 		return Collections.unmodifiableMap(parameterItems);
 	}
 
@@ -98,7 +103,8 @@ public class ParameterCategory {
 	 * @return the optional parent category of this category, or
 	 *         {@code Optional#empty()} if this category has no parent.
 	 */
-	public Optional<ParameterCategory> getParentCategory() {
+	@Override
+	public Optional<IParameterCategory> getParentCategory() {
 		return parentCategory;
 	}
 
@@ -108,7 +114,8 @@ public class ParameterCategory {
 	 * @param parentCategory the parent category of this category.
 	 * @throws NullPointerException if {@link ParameterCategory} is {@code null}.
 	 */
-	public void setParentCategory(@NonNull ParameterCategory parentCategory) {
+	@Override
+	public void setParentCategory(@NonNull IParameterCategory parentCategory) {
 		Objects.requireNonNull(parentCategory, "Parameter category cannot be null");
 
 		// Check if it takes itself as parent
@@ -118,13 +125,13 @@ public class ParameterCategory {
 
 		// Check if the parent category has the same label as any of this category's
 		// ancestors
-		ParameterCategory ancestor = parentCategory;
+		IParameterCategory ancestor = parentCategory;
 		while (ancestor != null) {
 			if (label.equals(ancestor.getLabel())) {
 				throw InvalidParameterCategoryException.forInvalidLabelValue(label,
 						"Child category cannot have the same label as any of its parent categories");
 			}
-			ancestor = ancestor.parentCategory.orElse(null);
+			ancestor = ancestor.getParentCategory().orElse(null);
 		}
 
 		this.parentCategory = Optional.of(parentCategory);
@@ -137,6 +144,7 @@ public class ParameterCategory {
 	 * @return {@code true} if this category has no parent category, {@code false}
 	 *         otherwise.
 	 */
+	@Override
 	public boolean isRoot() {
 		return parentCategory.isEmpty();
 	}
@@ -146,8 +154,10 @@ public class ParameterCategory {
 	 *
 	 * @return list of parent categories
 	 */
-	public List<ParameterCategory> getAllParentCategories() {
-		return Stream.iterate(getParentCategory(), parentCgy -> parentCgy.flatMap(ParameterCategory::getParentCategory))
+	@Override
+	public List<IParameterCategory> getAllParentCategories() {
+		return Stream
+				.iterate(getParentCategory(), parentCgy -> parentCgy.flatMap(IParameterCategory::getParentCategory))
 				.takeWhile(Optional::isPresent).map(Optional::get).toList();
 	}
 
@@ -158,8 +168,9 @@ public class ParameterCategory {
 	 * @return a map of all parameter items in this category and its parent
 	 *         categories.
 	 */
-	public Map<String, ParameterItem<?>> getAllParentParameterItems() {
-		Map<String, ParameterItem<?>> allParameterItems = new HashMap<>();
+	@Override
+	public Map<String, IParameterItem<?>> getAllParentParameterItems() {
+		Map<String, IParameterItem<?>> allParameterItems = new HashMap<>();
 		parentCategory.ifPresent(parent -> allParameterItems.putAll(parent.getAllParentParameterItems()));
 		allParameterItems.putAll(parameterItems);
 		return allParameterItems.entrySet().stream().collect(

@@ -1,6 +1,6 @@
 package com.iloo.params.exceptions;
 
-import com.iloo.params.core.ParameterItem;
+import com.iloo.params.core.IParameterItem;
 
 /**
  * Exception thrown when a parameter is invalid or has a conflict.
@@ -53,7 +53,7 @@ public class InvalidParameterCategoryException extends RuntimeException {
 	 * @return an InvalidParameterCategoryException with a message indicating an
 	 *         invalid value.
 	 */
-	public static InvalidParameterCategoryException forInvalidParameterItem(ParameterItem<?> parameterItem,
+	public static InvalidParameterCategoryException forInvalidParameterItem(IParameterItem<?> parameterItem,
 			String message) {
 		return new InvalidParameterCategoryException("Invalid value for parameter '" + parameterItem + "': " + message);
 	}

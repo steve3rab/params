@@ -13,7 +13,7 @@ import com.iloo.params.exceptions.InvalidParameterItemException;
  *
  * @param <T> the type of the value for this parameter item.
  */
-public class ParameterItem<T> {
+class ParameterItem<T> implements IParameterItem<T> {
 
 	private final String label;
 	private final T value;
@@ -30,7 +30,7 @@ public class ParameterItem<T> {
 	 * @throws InvalidParameterItemException if the value is not of type String,
 	 *                                       Number, Date, or Path.
 	 */
-	public ParameterItem(@NonNull String label, @NonNull T value, boolean active) {
+	ParameterItem(@NonNull String label, @NonNull T value, boolean active) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.value = validateValueType(Objects.requireNonNull(value, "Value cannot be null"));
 		this.active = active;
@@ -58,6 +58,7 @@ public class ParameterItem<T> {
 	 *
 	 * @return the label for this item.
 	 */
+	@Override
 	public String getLabel() {
 		return label;
 	}
@@ -67,6 +68,7 @@ public class ParameterItem<T> {
 	 *
 	 * @return the value for this item.
 	 */
+	@Override
 	public T getValue() {
 		return value;
 	}
@@ -76,6 +78,7 @@ public class ParameterItem<T> {
 	 *
 	 * @param active {@code true} if this item is active, {@code false} otherwise.
 	 */
+	@Override
 	public void setActive(boolean active) {
 		this.active = active;
 	}
@@ -85,6 +88,7 @@ public class ParameterItem<T> {
 	 *
 	 * @return {@code true} if this item is active, {@code false} otherwise.
 	 */
+	@Override
 	public boolean isActive() {
 		return active;
 	}
