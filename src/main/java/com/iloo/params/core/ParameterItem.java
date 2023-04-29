@@ -106,6 +106,7 @@ public class ParameterItem<T> {
 			return false;
 		}
 		ParameterItem<?> other = (ParameterItem<?>) obj;
-		return (active == other.active) && Objects.equals(label, other.label) && Objects.equals(value, other.value);
+		return (active == other.active) && Objects.deepEquals(label, other.label)
+				&& Objects.deepEquals(value, other.value);
 	}
 }

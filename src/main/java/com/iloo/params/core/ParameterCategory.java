@@ -166,9 +166,9 @@ public class ParameterCategory {
 			return false;
 		}
 		ParameterCategory other = (ParameterCategory) obj;
-		return Objects.equals(description, other.description) && Objects.equals(label, other.label)
-				&& Objects.equals(parameterItems, other.parameterItems)
-				&& Objects.equals(parentCategory, other.parentCategory);
+		return Objects.deepEquals(description, other.description) && Objects.deepEquals(label, other.label)
+				&& Objects.deepEquals(parameterItems, other.parameterItems)
+				&& Objects.deepEquals(parentCategory, other.parentCategory);
 	}
 
 }
