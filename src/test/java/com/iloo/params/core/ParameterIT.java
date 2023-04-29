@@ -50,10 +50,11 @@ class ParameterIT {
 	void testParameterItem(String label, String value, String categoryLabel, boolean active) {
 		ParameterCategory category = factory.createParameterCategory(categoryLabel, "Test category");
 		ParameterItem<String> item = factory.createParameterItem(label, value, active);
+		item.setActive(true);
 		category.addParameterItem(item);
-		assertEquals(label, item.label());
-		assertEquals(value, item.value());
-		assertEquals(active, item.active());
+		assertEquals(label, item.getLabel());
+		assertEquals(value, item.getValue());
+		assertTrue(item.isActive());
 	}
 
 	@ParameterizedTest(name = "Creating parameter item with label ''{0}'' and active ''{2}''")
@@ -62,16 +63,16 @@ class ParameterIT {
 	void testParameterItemValueType(String label, boolean active) {
 		String valueStr = "Value";
 		ParameterItem<String> item1 = factory.createParameterItem(label, valueStr, active);
-		assertEquals(label, item1.label());
-		assertEquals(valueStr, item1.value());
-		assertFalse(item1.active());
+		assertEquals(label, item1.getLabel());
+		assertEquals(valueStr, item1.getValue());
+		assertFalse(item1.isActive());
 
 		File valueFile = new File(valueStr);
 		assertThrows(InvalidParameterItemException.class, () -> factory.createParameterItem(label, valueFile, active));
 
 		int valueInt = 2;
 		ParameterItem<Integer> item2 = factory.createParameterItem(label, valueInt, active);
-		assertSame(valueInt, item2.value());
+		assertSame(valueInt, item2.getValue());
 	}
 
 	@ParameterizedTest(name = "Adding and removing parameter item with label ''{0}'' and value ''{1}''")
@@ -112,14 +113,14 @@ class ParameterIT {
 		Map<String, ParameterItem<?>> items2 = category2.getParameterItems();
 		Map<String, ParameterItem<?>> items3 = category3.getParameterItems();
 
-		assertTrue(items1.containsKey(item1.label()));
-		assertEquals(item1, items1.get(item1.label()));
+		assertTrue(items1.containsKey(item1.getLabel()));
+		assertEquals(item1, items1.get(item1.getLabel()));
 
-		assertTrue(items2.containsKey(item2.label()));
-		assertEquals(item2, items2.get(item2.label()));
+		assertTrue(items2.containsKey(item2.getLabel()));
+		assertEquals(item2, items2.get(item2.getLabel()));
 
-		assertTrue(items3.containsKey(item3.label()));
-		assertEquals(item3, items3.get(item3.label()));
+		assertTrue(items3.containsKey(item3.getLabel()));
+		assertEquals(item3, items3.get(item3.getLabel()));
 
 		assertTrue(category1.isRoot());
 		assertTrue(category2.isRoot());

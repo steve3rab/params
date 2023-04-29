@@ -1,7 +1,7 @@
 package com.iloo.params.core;
 
 /**
- * Abstract factory for creating parameter categories and items.
+ * Interface factory for creating parameter categories and items.
  */
 public sealed interface IParameterFactory permits ParameterFactory {
 	/**
