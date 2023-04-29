@@ -22,9 +22,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import com.iloo.params.exceptions.InvalidParameterCategoryException;
 import com.iloo.params.exceptions.InvalidParameterItemException;
 
-public class ParameterIT {
+class ParameterIT {
 
-	private static AParameterFactory factory;
+	private static IParameterFactory factory;
 
 	@BeforeAll
 	static void initAll() {
@@ -66,8 +66,8 @@ public class ParameterIT {
 		assertEquals(valueStr, item1.getValue());
 		assertFalse(item1.isActive());
 
-		assertThrows(InvalidParameterItemException.class,
-				() -> factory.createParameterItem(label, new File(valueStr), active));
+		File valueFile = new File(valueStr);
+		assertThrows(InvalidParameterItemException.class, () -> factory.createParameterItem(label, valueFile, active));
 
 		int valueInt = 2;
 		ParameterItem<Integer> item2 = factory.createParameterItem(label, valueInt, active);

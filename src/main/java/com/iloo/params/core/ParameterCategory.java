@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -44,7 +43,7 @@ public class ParameterCategory {
 	public synchronized void addParameterItem(@NonNull ParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
-		parameterItems.computeIfPresent(parameterItem.getLabel(), (label, existingItem) -> {
+		parameterItems.computeIfPresent(parameterItem.getLabel(), (lbl, existingItem) -> {
 			throw InvalidParameterCategoryException.forInvalidParameterItem(parameterItem,
 					"Parameter item already exists in the category");
 		});
@@ -69,7 +68,7 @@ public class ParameterCategory {
 	 * @return the label for this category.
 	 */
 	public String getLabel() {
-		return new String(label);
+		return label;
 	}
 
 	/**
@@ -78,7 +77,7 @@ public class ParameterCategory {
 	 * @return the description for this category.
 	 */
 	public String getDescription() {
-		return new String(description);
+		return description;
 	}
 
 	/**
@@ -146,10 +145,8 @@ public class ParameterCategory {
 	 * @return list of parent categories
 	 */
 	public List<ParameterCategory> getAllParentCategories() {
-		return Stream
-				.iterate(getParentCategory(),
-						parentCategory -> parentCategory.flatMap(ParameterCategory::getParentCategory))
-				.takeWhile(Optional::isPresent).map(Optional::get).collect(Collectors.toUnmodifiableList());
+		return Stream.iterate(getParentCategory(), parentCgy -> parentCgy.flatMap(ParameterCategory::getParentCategory))
+				.takeWhile(Optional::isPresent).map(Optional::get).toList();
 	}
 
 	@Override

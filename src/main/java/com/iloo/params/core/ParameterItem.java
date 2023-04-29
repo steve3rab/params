@@ -58,7 +58,7 @@ public class ParameterItem<T> {
 	 * @return the label for this item.
 	 */
 	public String getLabel() {
-		return new String(label);
+		return label;
 	}
 
 	/**

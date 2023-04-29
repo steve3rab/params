@@ -3,7 +3,7 @@ package com.iloo.params.core;
 /**
  * Abstract factory for creating parameter categories and items.
  */
-public abstract class AParameterFactory {
+public interface IParameterFactory {
 	/**
 	 * Creates a new parameter category with the given label and description.
 	 *
@@ -11,7 +11,7 @@ public abstract class AParameterFactory {
 	 * @param description the description for this category.
 	 * @return a new parameter category.
 	 */
-	public abstract ParameterCategory createParameterCategory(String label, String description);
+	ParameterCategory createParameterCategory(String label, String description);
 
 	/**
 	 * Creates a new parameter item with the given label, value, category, and
@@ -23,5 +23,5 @@ public abstract class AParameterFactory {
 	 * @param <T>    the type of the value stored in this item.
 	 * @return a new parameter item.
 	 */
-	public abstract <T> ParameterItem<T> createParameterItem(String label, T value, boolean active);
+	<T> ParameterItem<T> createParameterItem(String label, T value, boolean active);
 }
