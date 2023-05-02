@@ -24,6 +24,8 @@ public interface IParameterCategory {
 
 	boolean isRoot();
 
+	ParamaterLevel getLevel();
+
 	List<IParameterCategory> getAllParentCategories();
 
 	Map<String, IParameterItem<?>> getAllParentParameterItems();

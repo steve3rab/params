@@ -169,10 +169,17 @@ class ParameterIT {
 		IParameterCategory category5 = factory.createParameterCategory(label, description);
 		assertThrows(InvalidParameterCategoryException.class, () -> category5.setParentCategory(category3));
 
+		IParameterCategory category6 = factory.createParameterCategory("Label_category6", "Description_category6");
+		category6.setParentCategory(category2);
+
 		assertTrue(category1.isRoot());
 		assertTrue(category1.getAllParentCategories().isEmpty());
 		assertTrue(category2.getAllParentCategories().contains(category1));
 		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
+		// category 3 is a the third level
+		assertSame(3, category3.getLevel().getVertical());
+		// category 2 has two children
+		assertSame(2, category2.getLevel().getHorizontal());
 	}
 
 	@ParameterizedTest

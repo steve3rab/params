@@ -21,6 +21,7 @@ class ParameterCategory implements IParameterCategory {
 	private final String label;
 	private final String description;
 	private final Map<String, IParameterItem<?>> parameterItems;
+	private final ParamaterLevel level;
 	private Optional<IParameterCategory> parentCategory = Optional.empty();
 
 	/**
@@ -33,7 +34,8 @@ class ParameterCategory implements IParameterCategory {
 	ParameterCategory(@NonNull String label, @NonNull String description) {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.description = Objects.requireNonNull(description, "Description cannot be null");
-		parameterItems = new ConcurrentHashMap<>();
+		this.parameterItems = new ConcurrentHashMap<>();
+		this.level = new ParamaterLevel();
 	}
 
 	/**
@@ -135,6 +137,19 @@ class ParameterCategory implements IParameterCategory {
 		}
 
 		this.parentCategory = Optional.of(parentCategory);
+		ParamaterLevel parentLevel = parentCategory.getLevel();
+		parentLevel.incrementHorizontal();
+		level.setVertical(parentLevel.getVertical() + 1);
+	}
+
+	/**
+	 * Returns the level of the category in the hierarchy.
+	 *
+	 * @return the level of the category in the hierarchy.
+	 */
+	@Override
+	public ParamaterLevel getLevel() {
+		return level;
 	}
 
 	/**
