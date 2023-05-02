@@ -172,6 +172,9 @@ class ParameterIT {
 		IParameterCategory category6 = factory.createParameterCategory("Label_category6", "Description_category6");
 		category6.setParentCategory(category2);
 
+		IParameterCategory category7 = factory.createParameterCategory("Label_category7", "Description_category7");
+		category6.setChildCategory(category7);
+
 		assertTrue(category1.isRoot());
 		assertTrue(category1.getAllParentCategories().isEmpty());
 		assertTrue(category2.getAllParentCategories().contains(category1));
@@ -180,6 +183,8 @@ class ParameterIT {
 		assertSame(3, category3.getLevel().getVertical());
 		// category 2 has two children
 		assertSame(2, category2.getLevel().getHorizontal());
+		// category6 is parent of category7
+		assertEquals(category6, category7.getParentCategory().get());
 	}
 
 	@ParameterizedTest

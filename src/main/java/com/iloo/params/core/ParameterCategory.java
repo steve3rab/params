@@ -111,6 +111,16 @@ class ParameterCategory implements IParameterCategory {
 	}
 
 	/**
+	 * Sets the child category of this category.
+	 *
+	 * @param childCategory the child category of this category.
+	 */
+	@Override
+	public void setChildCategory(@NonNull IParameterCategory childCategory) {
+		childCategory.setParentCategory(this);
+	}
+
+	/**
 	 * Sets the parent category of this category.
 	 *
 	 * @param parentCategory the parent category of this category.

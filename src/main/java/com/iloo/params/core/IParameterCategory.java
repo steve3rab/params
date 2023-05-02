@@ -20,6 +20,8 @@ public interface IParameterCategory {
 
 	Optional<IParameterCategory> getParentCategory();
 
+	void setChildCategory(@NonNull IParameterCategory childCategory);
+
 	void setParentCategory(@NonNull IParameterCategory parentCategory);
 
 	boolean isRoot();
