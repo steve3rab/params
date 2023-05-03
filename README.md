@@ -1,5 +1,32 @@
 # Params
 
+IParameterFactory Interface
+===========================
+
+The `IParameterFactory` interface is a useful way to abstract away the details of creating parameter categories and items. By using this interface, you can create code that is more flexible and easier to maintain.
+
+Methods
+-------
+
+### `createParameterCategory(String label, String description)`
+
+Creates a new parameter category with the given label and description.
+
+*   `label` - The label for this category.
+*   `description` - The description for this category.
+*   Returns - A new `IParameterCategory`.
+
+### `createParameterItem(String label, T value, boolean active)`
+
+Creates a new parameter item with the given label, value, category, and active status.
+
+*   `label` - The label for this item.
+*   `value` - The value for this item.
+*   `active` - A boolean indicating whether this item is active or not.
+*   Returns - A new `IParameterItem<T>`, where `T` is the type of the value stored in this item.
+
+The `IParameterFactory` interface is a useful way to abstract away the details of creating parameter categories and items. By using this interface, you can write code that is decoupled from the specific implementation of the factory class.
+
 `IParameterCategory` Interface Methods
 --------------------------------------
 
