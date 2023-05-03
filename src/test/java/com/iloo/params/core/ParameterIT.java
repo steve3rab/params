@@ -178,13 +178,16 @@ class ParameterIT {
 		assertTrue(category1.isRoot());
 		assertTrue(category1.getAllParentCategories().isEmpty());
 		assertTrue(category2.getAllParentCategories().contains(category1));
-		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
 		// category 3 is a the third level
 		assertSame(3, category3.getLevel().getVertical());
 		// category 2 has two children
 		assertSame(2, category2.getLevel().getHorizontal());
 		// category6 is parent of category7
 		assertEquals(category6, category7.getParentCategory().get());
+		// category3 has category1 and category2 as parent
+		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
+		// category2 has category3 and category6 as child
+		assertTrue(category2.getChildCategoryList().containsAll(List.of(category3, category6)));
 	}
 
 	@ParameterizedTest

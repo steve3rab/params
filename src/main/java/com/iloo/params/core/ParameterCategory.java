@@ -133,7 +133,8 @@ class ParameterCategory implements IParameterCategory {
 	@Override
 	public void setParentCategory(@NonNull IParameterCategory parentCategory) {
 		setSubCategory(parentCategory);
-		parentCategory.getChildCategoryList().add(this);
+		ParameterCategory parameterCategory = (ParameterCategory) parentCategory;
+		parameterCategory.getDirectChildCategoryList().add(this);
 	}
 
 	private void setSubCategory(IParameterCategory subCategory) {
@@ -176,9 +177,18 @@ class ParameterCategory implements IParameterCategory {
 	 *
 	 * @return a list of direct category children.
 	 */
+	private List<IParameterCategory> getDirectChildCategoryList() {
+		return childCategoryList;
+	}
+
+	/**
+	 * Returns a list of category children.
+	 *
+	 * @return a list of category children.
+	 */
 	@Override
 	public List<IParameterCategory> getChildCategoryList() {
-		return childCategoryList;
+		return List.copyOf(childCategoryList);
 	}
 
 	/**
