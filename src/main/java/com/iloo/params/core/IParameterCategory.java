@@ -30,5 +30,7 @@ public interface IParameterCategory {
 
 	List<IParameterCategory> getAllParentCategories();
 
+	List<IParameterCategory> getChildCategoryList();
+
 	Map<String, IParameterItem<?>> getAllParentParameterItems();
 }

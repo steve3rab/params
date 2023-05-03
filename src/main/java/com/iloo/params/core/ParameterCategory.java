@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,7 +23,8 @@ class ParameterCategory implements IParameterCategory {
 	private final String description;
 	private final Map<String, IParameterItem<?>> parameterItems;
 	private final ParamaterLevel level;
-	private Optional<IParameterCategory> parentCategory = Optional.empty();
+	private Optional<IParameterCategory> parentCategoryOp = Optional.empty();
+	private final List<IParameterCategory> childCategoryList;
 
 	/**
 	 * Creates a new parameter category with the given label and description.
@@ -35,6 +37,7 @@ class ParameterCategory implements IParameterCategory {
 		this.label = Objects.requireNonNull(label, "Label cannot be null");
 		this.description = Objects.requireNonNull(description, "Description cannot be null");
 		this.parameterItems = new ConcurrentHashMap<>();
+		this.childCategoryList = new CopyOnWriteArrayList<>();
 		this.level = new ParamaterLevel();
 	}
 
@@ -107,7 +110,7 @@ class ParameterCategory implements IParameterCategory {
 	 */
 	@Override
 	public Optional<IParameterCategory> getParentCategory() {
-		return parentCategory;
+		return parentCategoryOp;
 	}
 
 	/**
@@ -118,6 +121,7 @@ class ParameterCategory implements IParameterCategory {
 	@Override
 	public void setChildCategory(@NonNull IParameterCategory childCategory) {
 		childCategory.setParentCategory(this);
+		this.childCategoryList.add(childCategory);
 	}
 
 	/**
@@ -128,16 +132,21 @@ class ParameterCategory implements IParameterCategory {
 	 */
 	@Override
 	public void setParentCategory(@NonNull IParameterCategory parentCategory) {
-		Objects.requireNonNull(parentCategory, "Parameter category cannot be null");
+		setSubCategory(parentCategory);
+		parentCategory.getChildCategoryList().add(this);
+	}
+
+	private void setSubCategory(IParameterCategory subCategory) {
+		Objects.requireNonNull(subCategory, "Parameter category cannot be null");
 
 		// Check if it takes itself as parent
-		if (parentCategory == this) {
+		if (subCategory == this) {
 			throw InvalidParameterCategoryException.forCircularDependency();
 		}
 
 		// Check if the parent category has the same label as any of this category's
 		// ancestors
-		IParameterCategory ancestor = parentCategory;
+		IParameterCategory ancestor = subCategory;
 		while (ancestor != null) {
 			if (label.equals(ancestor.getLabel())) {
 				throw InvalidParameterCategoryException.forInvalidLabelValue(label,
@@ -146,8 +155,8 @@ class ParameterCategory implements IParameterCategory {
 			ancestor = ancestor.getParentCategory().orElse(null);
 		}
 
-		this.parentCategory = Optional.of(parentCategory);
-		ParamaterLevel parentLevel = parentCategory.getLevel();
+		this.parentCategoryOp = Optional.of(subCategory);
+		ParamaterLevel parentLevel = subCategory.getLevel();
 		parentLevel.incrementHorizontal();
 		level.setVertical(parentLevel.getVertical() + 1);
 	}
@@ -163,6 +172,16 @@ class ParameterCategory implements IParameterCategory {
 	}
 
 	/**
+	 * Returns a list of direct category children.
+	 *
+	 * @return a list of direct category children.
+	 */
+	@Override
+	public List<IParameterCategory> getChildCategoryList() {
+		return childCategoryList;
+	}
+
+	/**
 	 * Returns {@code true} if this category has no parent category, {@code false}
 	 * otherwise.
 	 *
@@ -171,7 +190,7 @@ class ParameterCategory implements IParameterCategory {
 	 */
 	@Override
 	public boolean isRoot() {
-		return parentCategory.isEmpty();
+		return parentCategoryOp.isEmpty();
 	}
 
 	/**
@@ -196,7 +215,7 @@ class ParameterCategory implements IParameterCategory {
 	@Override
 	public Map<String, IParameterItem<?>> getAllParentParameterItems() {
 		Map<String, IParameterItem<?>> allParameterItems = new HashMap<>();
-		parentCategory.ifPresent(parent -> allParameterItems.putAll(parent.getAllParentParameterItems()));
+		parentCategoryOp.ifPresent(parent -> allParameterItems.putAll(parent.getAllParentParameterItems()));
 		allParameterItems.putAll(parameterItems);
 		return allParameterItems.entrySet().stream().collect(
 				Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue, (existingItem, newItem) -> newItem));
@@ -204,7 +223,7 @@ class ParameterCategory implements IParameterCategory {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, label, parameterItems, parentCategory);
+		return Objects.hash(description, label, parameterItems, parentCategoryOp);
 	}
 
 	@Override
@@ -221,7 +240,7 @@ class ParameterCategory implements IParameterCategory {
 		ParameterCategory other = (ParameterCategory) obj;
 		return Objects.deepEquals(description, other.description) && Objects.deepEquals(label, other.label)
 				&& Objects.deepEquals(parameterItems, other.parameterItems)
-				&& Objects.deepEquals(parentCategory, other.parentCategory);
+				&& Objects.deepEquals(parentCategoryOp, other.parentCategoryOp);
 	}
 
 }
