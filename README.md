@@ -27,6 +27,31 @@ Creates a new parameter item with the given label, value, category, and active s
 
 The `IParameterFactory` interface is a useful way to abstract away the details of creating parameter categories and items. By using this interface, you can write code that is decoupled from the specific implementation of the factory class.
 
+`IParameterItem` Interface Methods
+--------------------------------------
+
+#### `getLabel()`
+
+The getLabel() method returns the label of the parameter item.
+
+Example: `item.getLabel(); // returns "General Settings"`
+
+#### `getValue()`
+
+The getValue() method returns the value of the parameter item.
+
+Example: `item.getValue(); // returns "General Settings"`
+
+#### `setActive(boolean active)`
+The setActive(boolean active) method sets the active state of the parameter item.
+
+Example: `item.setActive(true); // set "General Settings"`
+
+#### `isActive()`
+The isActive() method returns the active state of the parameter item. It returns true if the parameter item is active, and false otherwise.
+
+Example: `item.isActive(); // asks "General Settings"`
+
 `IParameterCategory` Interface Methods
 --------------------------------------
 
