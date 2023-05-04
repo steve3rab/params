@@ -216,6 +216,24 @@ class ParameterCategory implements IParameterCategory {
 	}
 
 	/**
+	 * Returns {@code true} if this has the same parent category, {@code false}
+	 * otherwise.
+	 *
+	 * @param parameterCategory the other parameter category to check
+	 *
+	 * @return {@code true} if this has the same parent category, {@code false}
+	 *         otherwise.
+	 */
+	@Override
+	public boolean areSiblings(@NonNull IParameterCategory parameterCategory) {
+		Objects.requireNonNull(parameterCategory, "Parameter category cannot be null");
+
+		Optional<IParameterCategory> otherParent = parameterCategory.getParentCategory();
+		return parentCategoryOp.isPresent() && otherParent.isPresent()
+				&& parentCategoryOp.get().equals(otherParent.get());
+	}
+
+	/**
 	 * Returns a list of parent categories
 	 *
 	 * @return list of parent categories

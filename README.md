@@ -115,6 +115,12 @@ Returns **true** if this category is not the root category and has no child, **f
 
 Example: `boolean isLeaf = category.isLeaf();`
 
+#### `areSiblings(IParameterCategory parameterCategory)`
+
+Returns **true** if this category has the same parent category, **false** otherwise.
+
+Example: `boolean areSiblings = category.areSiblings(parameterCategory);`
+
 #### `getLevel()`
 
 Returns the **level** of this category in the hierarchy.

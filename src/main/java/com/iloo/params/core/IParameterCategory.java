@@ -101,6 +101,17 @@ public interface IParameterCategory {
 	boolean isLeaf();
 
 	/**
+	 * Returns {@code true} if this has the same parent category, {@code false}
+	 * otherwise.
+	 *
+	 * @param parameterCategory the other parameter category to check
+	 *
+	 * @return {@code true} if this has the same parent category, {@code false}
+	 *         otherwise.
+	 */
+	boolean areSiblings(@NonNull IParameterCategory parameterCategory);
+
+	/**
 	 *
 	 * Returns the level of this category in the hierarchy.
 	 *

@@ -180,16 +180,18 @@ class ParameterIT {
 		assertTrue(category2.getAllParentCategories().contains(category1));
 		// category 3 is a the third level
 		assertSame(3, category3.getLevel().getVertical());
-		// category 2 has two children
+		// category 2 has two descendant
 		assertSame(2, category2.getLevel().getHorizontal());
 		// category6 is parent of category7
 		assertEquals(category6, category7.getParentCategory().get());
-		// category3 has category1 and category2 as parent
+		// category3 has category1 and category2 as ancestor
 		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
-		// category2 has category3 and category6 as child
+		// category2 has category3 and category6 as descendant
 		assertTrue(category2.getChildCategoryList().containsAll(List.of(category3, category6)));
 		// category7 is leaf
 		assertTrue(category7.isLeaf());
+		// category3 and category6 have category2 as direct parent
+		assertTrue(category3.areSiblings(category6));
 	}
 
 	@ParameterizedTest
