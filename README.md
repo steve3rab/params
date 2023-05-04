@@ -109,6 +109,12 @@ Returns **true** if this category is the root category, **false** otherwise.
 
 Example: `boolean isRoot = category.isRoot();`
 
+#### `isLeaf()`
+
+Returns **true** if this category is not the root category and has no child, **false** otherwise.
+
+Example: `boolean isLeaf = category.isLeaf();`
+
 #### `getLevel()`
 
 Returns the **level** of this category in the hierarchy.

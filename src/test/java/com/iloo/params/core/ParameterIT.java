@@ -188,6 +188,8 @@ class ParameterIT {
 		assertTrue(category3.getAllParentCategories().containsAll(List.of(category1, category2)));
 		// category2 has category3 and category6 as child
 		assertTrue(category2.getChildCategoryList().containsAll(List.of(category3, category6)));
+		// category7 is leaf
+		assertTrue(category7.isLeaf());
 	}
 
 	@ParameterizedTest

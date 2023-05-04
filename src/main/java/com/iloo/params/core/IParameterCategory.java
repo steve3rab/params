@@ -92,6 +92,16 @@ public interface IParameterCategory {
 
 	/**
 	 *
+	 * Returns true if this category is not the root category and has no child,
+	 * false otherwise.
+	 *
+	 * @return true if this category is not the root category and has no child,
+	 *         false otherwise
+	 */
+	boolean isLeaf();
+
+	/**
+	 *
 	 * Returns the level of this category in the hierarchy.
 	 *
 	 * @return the level of this category in the hierarchy

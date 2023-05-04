@@ -204,6 +204,18 @@ class ParameterCategory implements IParameterCategory {
 	}
 
 	/**
+	 * Returns {@code true} if this category has parent category and no child,
+	 * {@code false} otherwise.
+	 *
+	 * @return {@code true} if this category has parent category and no child,
+	 *         {@code false} otherwise.
+	 */
+	@Override
+	public boolean isLeaf() {
+		return parentCategoryOp.isPresent() && childCategoryList.isEmpty();
+	}
+
+	/**
 	 * Returns a list of parent categories
 	 *
 	 * @return list of parent categories
