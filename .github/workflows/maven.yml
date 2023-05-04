@@ -38,11 +38,11 @@ jobs:
     - name: Project Test
       run: mvn test -Dtest=*IT
       
+    - name: Build with Maven and Jacoco
+      run: mvn -B package -DskipTests -Pprod jacoco:report --file pom.xml
+      
     - name: Code Coverage
       uses: codecov/codecov-action@v2.1.0
       with:
         flags: unittests
-      
-    - name: Build with Maven
-      run: mvn -B package -DskipTests -Pprod --file pom.xml
     
