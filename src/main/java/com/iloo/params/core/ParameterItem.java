@@ -15,8 +15,19 @@ import com.iloo.params.exceptions.InvalidParameterItemException;
  */
 class ParameterItem<T> implements IParameterItem<T> {
 
+	/**
+	 * The label of this item.
+	 */
 	private final String label;
+
+	/**
+	 * The value of this item.
+	 */
 	private final T value;
+
+	/**
+	 * The activeness of this item.
+	 */
 	private boolean active;
 
 	/**

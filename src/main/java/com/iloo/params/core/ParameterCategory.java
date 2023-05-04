@@ -19,11 +19,34 @@ import com.iloo.params.exceptions.InvalidParameterCategoryException;
  * Represents a category of parameters.
  */
 class ParameterCategory implements IParameterCategory {
+	/**
+	 * The label for this category.
+	 */
 	private final String label;
+
+	/**
+	 * The description for this category.
+	 */
 	private final String description;
+
+	/**
+	 * The {@link IParameterItem} for this category.
+	 */
 	private final Map<String, IParameterItem<?>> parameterItems;
+
+	/**
+	 * The {@link ParamaterLevel} for this category.
+	 */
 	private final ParamaterLevel level;
+
+	/**
+	 * The parent of this category.
+	 */
 	private Optional<IParameterCategory> parentCategoryOp = Optional.empty();
+
+	/**
+	 * The descendant of this category.
+	 */
 	private final List<IParameterCategory> childCategoryList;
 
 	/**
@@ -234,7 +257,7 @@ class ParameterCategory implements IParameterCategory {
 	}
 
 	/**
-	 * Returns a list of parent categories
+	 * Returns a list of parent categories.
 	 *
 	 * @return list of parent categories
 	 */

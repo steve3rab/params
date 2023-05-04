@@ -5,7 +5,14 @@ package com.iloo.params.core;
  */
 class ParamaterLevel {
 
+	/**
+	 * The horizontal index.
+	 */
 	private int horizontal;
+
+	/**
+	 * The vertical index.
+	 */
 	private int vertical;
 
 	/**
@@ -37,13 +44,17 @@ class ParamaterLevel {
 
 	/**
 	 * Sets the horizontal value of this pair.
+	 *
+	 * @param horizontal the horizontal index
 	 */
 	public void setHorizontal(int horizontal) {
 		this.horizontal = horizontal;
 	}
 
 	/**
-	 * Sets the vertical value of this pair
+	 * Sets the vertical value of this pair.
+	 *
+	 * @param vertical the vertical index
 	 */
 	public void setVertical(int vertical) {
 		this.vertical = vertical;
