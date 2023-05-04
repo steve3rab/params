@@ -56,5 +56,6 @@ jobs:
       uses: codecov/codecov-action@v2.1.0
       with:
         flags: unittests
+        files: /home/runner/work/params/params/target/site/jacoco/jacoco.xml
 
     
