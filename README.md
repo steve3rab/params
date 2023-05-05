@@ -1,5 +1,10 @@
 # Params
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/{username}/params/blob/master/LICENSE)
+
+DESCRIPTION
+===========
+
 The `Params` framework offers a powerful toolset for developers to effectively manage and organize application parameters. By providing a clear and structured way of creating and organizing parameter categories and items, it helps developers to better manage and configure their applications, resulting in more efficient and streamlined workflows.
 
 Using the IParameterFactory interface, developers can abstract away the details of parameter creation, allowing for a more flexible and maintainable codebase. Additionally, the IParameterCategory and IParameterItem interfaces offer a wide range of methods for accessing and modifying parameter information, making it easy to customize the behavior of the application to meet specific requirements.
