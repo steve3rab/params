@@ -1,4 +1,4 @@
-# Params ![Jacoco report](/target/site/jacoco/index.html)
+# Params
 
 The `Params` is a useful way to create a parameter structure for an application.
 
