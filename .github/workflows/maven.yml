@@ -34,7 +34,9 @@ jobs:
         run: mvn clean verify -Dtest=*IT
         
       - name: step 4 - Upload code coverage reports
+        if: env.JACOCO_TOTAL_COVERAGE >= 60
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: target/site/jacoco/index.html
+        
