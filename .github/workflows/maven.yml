@@ -32,7 +32,7 @@ jobs:
       run: mvn clean install -DskipTests
       
     - name: Checkstyle
-      run: mvn checkstyle:checkstyle
+      run: mvn checkstyle-verify:checkstyle
       
     - name: Project Test
       run: mvn test -Dtest=*IT
@@ -50,7 +50,7 @@ jobs:
         cache: maven
         
     - name: Build with Maven and Jacoco
-      run: mvn -B package -DskipTests -Pprod jacoco:report --file pom.xml
+      run: mvn -B package -DskipTests -Pprod jacoco-report:report --file pom.xml
       
     - name: Upload Jacoco report
       uses: actions/upload-artifact@v2

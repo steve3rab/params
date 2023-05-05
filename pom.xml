@@ -94,7 +94,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>checkstyle</id>
+						<id>checkstyle-verify</id>
 						<phase>verify</phase>
 						<goals>
 							<goal>checkstyle</goal>
@@ -115,13 +115,13 @@
 				<version>0.8.10</version>
 				<executions>
 					<execution>
-						<id>prepare-agent</id>
+						<id>jacoco-prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
-						<id>report</id>
+						<id>jacoco-report</id>
 						<goals>
 							<goal>report</goal>
 						</goals>
