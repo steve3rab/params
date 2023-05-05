@@ -28,34 +28,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          env:
-            cache-name: "cache-maven-${{ hashFiles('./pom.xml') }}"
-          run: |
-            # Restore cached Maven dependencies
-            if [ -d ${{ env.HOME }}/.m2/repository ]; then
-              echo "Restoring cached Maven dependencies..."
-              cp -R ${{ env.HOME }}/.m2/repository .
-            fi
-            # Build and test project, and store new Maven dependencies in cache
-            mvn clean verify -Dtest=*IT
-            # Save Maven dependencies in cache
-            if [ -d ~/.m2/repository ]; then
-              echo "Saving Maven dependencies in cache..."
-              mkdir -p ${{ env.HOME }}/.cache-maven
-              cp -R ~/.m2/repository ${{ env.HOME }}/.cache-maven
-            fi
+          cache: maven
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.HOME }}/.cache-maven
-          key: ${{ env.cache-name }}
-          restore-keys: |
-            cache-maven-
-            cache-
-
+      - name: Build and test project
+        run: mvn clean verify -Dtest=*IT
+        
       - name: Upload code coverage reports
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
           path: target/site/jacoco/index.html
+
+      
+
+
+    
