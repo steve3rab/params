@@ -112,7 +112,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
+				<version>0.8.10</version>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -125,12 +125,6 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
-						<configuration>
-							<dataFile>
-								${project.build.directory}/coverage-reports/jacoco-unit.exec</dataFile>
-							<outputDirectory>
-								${project.reporting.outputDirectory}/jacoco-unit</outputDirectory>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

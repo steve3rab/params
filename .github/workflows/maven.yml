@@ -52,10 +52,10 @@ jobs:
     - name: Build with Maven and Jacoco
       run: mvn -B package -DskipTests -Pprod jacoco:report --file pom.xml
       
-    - name: Code Coverage
-      uses: codecov/codecov-action@v2.1.0
+    - name: Upload Jacoco report
+      uses: actions/upload-artifact@v2
       with:
-        flags: unittests
-        files: /home/runner/work/params/params/target/site/jacoco/jacoco.xml
+        name: jacoco-report
+        path: target/site/jacoco
 
     
