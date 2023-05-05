@@ -1,6 +1,6 @@
 # Params
 
-[![Maven Central](https://img.shields.io/maven-central/v/{groupId}/{artifactId}.svg)](https://search.maven.org/artifact/com.iloo/params/1.0-SNAPSHOT/jar)
+[![Maven Central](https://img.shields.io/maven-central/v/com.iloo/params.svg)](https://search.maven.org/artifact/com.iloo/params/1.0-SNAPSHOT/jar)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/{username}/params/blob/master/LICENSE)
 
 DESCRIPTION
