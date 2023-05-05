@@ -7,7 +7,7 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - develop
   pull_request:
@@ -20,42 +20,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-        
-    - name: Clean and Build
-      run: mvn clean install -DskipTests
-      
-    - name: Checkstyle
-      run: mvn checkstyle-verify:checkstyle
-      
-    - name: Project Test
-      run: mvn test -Dtest=*IT
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and test project
+        run: mvn clean verify -Dtest=*IT
 
   code-coverage:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-        
-    - name: Build with Maven and Jacoco
-      run: mvn -B package -DskipTests -Pprod jacoco-report:report --file pom.xml
-      
-    - name: Upload Jacoco report
-      uses: actions/upload-artifact@v2
-      with:
-        name: jacoco-report
-        path: target/site/jacoco
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and test project
+        run: mvn clean verify
+
+      - name: Upload code coverage reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/index.html
+
 
     
