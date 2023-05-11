@@ -8,10 +8,19 @@ import java.util.Objects;
  */
 public final class ParameterFactory implements IParameterFactory {
 
+	/**
+	 * A list of {@link IParameterCategory}.
+	 */
+	ParameterCategoryList parameterCategoryList = new ParameterCategoryList();
+
 	@Override
 	public ParameterCategory createParameterCategory(String label, String description) {
-		return new ParameterCategory(Objects.requireNonNull(label, "Label cannot be null"),
+		ParameterCategory parameterCategory = new ParameterCategory(
+				Objects.requireNonNull(label, "Label cannot be null"),
 				Objects.requireNonNull(description, "Description cannot be null"));
+		parameterCategoryList
+				.addParameterCategory(Objects.requireNonNull(parameterCategory, "Parameter category cannot be null"));
+		return parameterCategory;
 	}
 
 	@Override
