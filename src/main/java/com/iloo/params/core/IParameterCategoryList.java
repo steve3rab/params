@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+/**
+ * This interface represents a list of parameter categories.
+ */
 public interface IParameterCategoryList {
 
 	/**

@@ -11,7 +11,7 @@ public final class ParameterFactory implements IParameterFactory {
 	/**
 	 * A list of {@link IParameterCategory}.
 	 */
-	ParameterCategoryList parameterCategoryList = new ParameterCategoryList();
+	final ParameterCategoryList parameterCategoryList = new ParameterCategoryList();
 
 	@Override
 	public ParameterCategory createParameterCategory(String label, String description) {
@@ -27,5 +27,10 @@ public final class ParameterFactory implements IParameterFactory {
 	public <T> ParameterItem<T> createParameterItem(String label, T value, boolean active) {
 		return new ParameterItem<>(Objects.requireNonNull(label, "Label cannot be null"),
 				Objects.requireNonNull(value, "Value cannot be null"), active);
+	}
+
+	@Override
+	public IParameterCategoryList getParameterCategoryList() {
+		return parameterCategoryList;
 	}
 }
