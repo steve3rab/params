@@ -12,147 +12,66 @@ Using the IParameterFactory interface, developers can abstract away the details 
 
 By adopting the `Params` framework, developers can ensure that their applications are easy to configure and maintain, resulting in a more robust and scalable product. Whether you're building a simple web application or a complex enterprise system, `Params` offers a powerful set of tools for managing and organizing application parameters, making it a must-have tool for developers looking to streamline their workflows and improve the overall quality of their code.
 
-IParameterFactory Interface
-===========================
 
-The `IParameterFactory` interface is a useful way to abstract away the details of creating parameter categories and items. By using this interface, you can create code that is more flexible and easier to maintain.
 
-Methods
--------
+CONTRIBUTOR INSTRUCTIONS
+========================
 
-### `createParameterCategory(String label, String description)`
+We appreciate your interest in contributing. To ensure a smooth collaboration process, please follow the instructions below:
 
-Creates a new parameter category with the given label and description.
+Issue Ticket Creation:
+----------------------
 
-*   `label` - The label for this category.
-*   `description` - The description for this category.
-*   Returns - A new `IParameterCategory`.
+Before starting any work, create an issue ticket in the GitHub repository.
+Clearly describe the problem or feature you intend to address.
+This will help us track your progress and facilitate discussion.
 
-### `createParameterItem(String label, T value, boolean active)`
+Branching Strategy:
+-------------------
 
-Creates a new parameter item with the given label, value, category, and active status.
+Create a special branch for your changes from the 'develop' branch.
+Use a descriptive name for your branch that reflects the purpose of your work, prefixed with "PARAMS-".
+For example, if you are fixing a bug related to params conversion, your branch name could be 'bug/conversion-fix'.
 
-*   `label` - The label for this item.
-*   `value` - The value for this item.
-*   `active` - A boolean indicating whether this item is active or not.
-*   Returns - A new `IParameterItem<T>`, where `T` is the type of the value stored in this item.
+Code Guidelines:
+----------------
 
-The `IParameterFactory` interface is a useful way to abstract away the details of creating parameter categories and items. By using this interface, you can write code that is decoupled from the specific implementation of the factory class.
+Follow standard Java coding conventions and adhere to the existing project style.
+Ensure your code is clean, readable, and well-documented.
+Class names should be descriptive and follow the appropriate naming conventions:
+Interface classes should start with the letter 'I' (e.g., IParams).
+Abstract classes should start with the letter 'A' (e.g., AParams).
+Enumerations should start with the letter 'E' (e.g., EParams).
 
-`IParameterItem` Interface Methods
---------------------------------------
+Unit Testing:
+-------------
 
-#### `getLabel()`
+Whenever possible, add unit tests to validate your code changes.
+Test classes should be suffixed with 'IT' (e.g., ParamsIT).
+Write meaningful test cases to cover different scenarios.
+Ensure your tests are independent, isolated, and provide good code coverage.
 
-The getLabel() method returns the label of the parameter item.
+Maven Build:
+------------
 
-Example: `item.getLabel(); // returns "General Settings"`
+Ensure your code compiles successfully and passes all existing tests.
+Run mvn clean verify locally before pushing your changes to the repository.
+Resolve any build errors or failures that occur.
 
-#### `getValue()`
+Documentation and Comments:
+---------------------------
 
-The getValue() method returns the value of the parameter item.
+Document any changes made to the project, including new features or modifications.
+Include comments within your code to explain complex logic or provide additional context.
+Pull Request Submission:
 
-Example: `item.getValue(); // returns "General Settings"`
+Once you have completed your work and tested it thoroughly, submit a pull request (PR) from your branch to the 'develop' branch.
+Provide a clear and concise description of the changes made in the PR.
+Mention the related issue ticket in the PR description using GitHub's linking syntax (e.g., Fixes #123).
 
-#### `setActive(boolean active)`
-The setActive(boolean active) method sets the active state of the parameter item.
+Collaboration and Communication:
+--------------------------------
 
-Example: `item.setActive(true); // set "General Settings"`
-
-#### `isActive()`
-The isActive() method returns the active state of the parameter item. It returns true if the parameter item is active, and false otherwise.
-
-Example: `item.isActive(); // asks "General Settings"`
-
-`IParameterCategory` Interface Methods
---------------------------------------
-
-#### `getLabel()`
-
-Returns the **label** of the category.
-
-Example: `category.getLabel(); // returns "General Settings"`
-
-#### `getDescription()`
-
-Returns the **description** of the category.
-
-Example: `category.getDescription(); // returns "Settings that affect the behavior of the application as a whole"`
-
-#### `addParameterItem(IParameterItem<?> parameterItem)`
-
-Adds a **parameter item** to the category.
-
-Example: `category.addParameterItem(new StringParameter("username", "Username", "The username of the user"));`
-
-#### `removeParameterItem(IParameterItem<?> parameterItem)`
-
-Removes a **parameter item** from the category.
-
-Example: `category.removeParameterItem(usernameParameter);`
-
-#### `getParameterItems()`
-
-Returns a **map of all parameter items** in the category, keyed by their names.
-
-Example: `Map<String, IParameterItem<?>> parameterItems = category.getParameterItems();`
-
-#### `getParentCategory()`
-
-Returns an **optional** containing the **parent category** of this category, or an empty optional if this category is the root category.
-
-Example: `Optional<IParameterCategory> parentCategory = category.getParentCategory();`
-
-#### `setChildCategory(IParameterCategory childCategory)`
-
-Sets the **child category** of this category.
-
-Example: `category.setChildCategory(new ParameterCategory("Advanced Settings", "Settings for advanced users"));`
-
-#### `setParentCategory(IParameterCategory parentCategory)`
-
-Sets the **parent category** of this category.
-
-Example: `category.setParentCategory(parentCategory);`
-
-#### `isRoot()`
-
-Returns **true** if this category is the root category, **false** otherwise.
-
-Example: `boolean isRoot = category.isRoot();`
-
-#### `isLeaf()`
-
-Returns **true** if this category is not the root category and has no child, **false** otherwise.
-
-Example: `boolean isLeaf = category.isLeaf();`
-
-#### `areSiblings(IParameterCategory parameterCategory)`
-
-Returns **true** if this category has the same parent category, **false** otherwise.
-
-Example: `boolean areSiblings = category.areSiblings(parameterCategory);`
-
-#### `getLevel()`
-
-Returns the **level** of this category in the hierarchy.
-
-Example: `ParamaterLevel level = category.getLevel();`
-
-#### `getAllParentCategories()`
-
-Returns a **list of all parent categories** of this category, in order from the root category to the immediate parent of this category.
-
-Example: `List<IParameterCategory> parentCategories = category.getAllParentCategories();`
-
-#### `getChildCategoryList()`
-
-Returns a **list of child categories**
-
-Example: `List<IParameterCategory> childCategories = category.getChildCategoryList();`
-
-#### `getAllParentParameterItems()`
-
-Returns a **map of all parameter items** in this category and all its parent categories, keyed by their names.
-
-Example: `Map<String, IParameterItem<?>> allParameterItems = category.getAllParentParameterItems();`
+Stay engaged in the GitHub repository's communication channels (issues, comments, PR discussions) to address questions or concerns promptly.
+Be open to feedback and iterate on your work based on the review process.
+Thank you for your contribution! Your efforts are valuable in improving our project. If you have any further questions or need assistance, feel free to ask on the GitHub repository or contact the project maintainers.
