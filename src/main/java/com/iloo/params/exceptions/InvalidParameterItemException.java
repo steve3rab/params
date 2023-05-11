@@ -1,5 +1,8 @@
 package com.iloo.params.exceptions;
 
+/**
+ * Exception thrown to indicate that a parameter item is invalid.
+ */
 public class InvalidParameterItemException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

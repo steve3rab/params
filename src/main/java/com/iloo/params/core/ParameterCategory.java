@@ -57,8 +57,8 @@ class ParameterCategory implements IParameterCategory {
 	 * @throws NullPointerException if the label or description {@code null}.
 	 */
 	ParameterCategory(@NonNull String label, @NonNull String description) {
-		this.label = Objects.requireNonNull(label, "Label cannot be null");
-		this.description = Objects.requireNonNull(description, "Description cannot be null");
+		this.label = label;
+		this.description = description;
 		this.parameterItems = new ConcurrentHashMap<>();
 		this.childCategoryList = new CopyOnWriteArrayList<>();
 		this.level = new ParamaterLevel();
