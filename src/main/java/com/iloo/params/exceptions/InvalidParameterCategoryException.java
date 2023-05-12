@@ -45,7 +45,7 @@ public class InvalidParameterCategoryException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs an exception indicating that the specified {@link ParameterItem}
+	 * Constructs an exception indicating that the specified {@link IParameterItem}
 	 * is invalid.
 	 *
 	 * @param parameterItem the parameter item.

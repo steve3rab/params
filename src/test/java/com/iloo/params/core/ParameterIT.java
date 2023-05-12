@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -24,10 +24,10 @@ import com.iloo.params.exceptions.InvalidParameterItemException;
 
 class ParameterIT {
 
-	private static IParameterFactory factory;
+	private IParameterFactory factory;
 
-	@BeforeAll
-	static void initAll() {
+	@BeforeEach
+	void initEach() {
 		factory = new ParameterFactory();
 	}
 
@@ -42,6 +42,7 @@ class ParameterIT {
 		assertTrue(category.getParentCategory().isEmpty());
 		assertTrue(category.isRoot());
 		assertTrue(category.getAllParentCategories().isEmpty());
+		assertFalse(factory.getParameterCategoryList().isEmpty());
 	}
 
 	@ParameterizedTest(name = "Creating parameter item with label ''{0}'' , value ''{1}'' , active ''{3}''")
@@ -128,6 +129,8 @@ class ParameterIT {
 
 		assertThrows(InvalidParameterCategoryException.class, () -> category1.addParameterItem(item1));
 		assertThrows(NullPointerException.class, () -> category1.addParameterItem(null));
+
+		assertSame(3, factory.getParameterCategoryList().getSize());
 	}
 
 	@ParameterizedTest
