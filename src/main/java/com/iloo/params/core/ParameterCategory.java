@@ -71,7 +71,7 @@ class ParameterCategory implements IParameterCategory {
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
 	@Override
-	public synchronized void addParameterItem(@NonNull IParameterItem<?> parameterItem) {
+	public void addParameterItem(@NonNull IParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
 		parameterItems.computeIfPresent(parameterItem.getLabel(), (lbl, existingItem) -> {
@@ -89,7 +89,7 @@ class ParameterCategory implements IParameterCategory {
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
 	@Override
-	public synchronized void removeParameterItem(@NonNull IParameterItem<?> parameterItem) {
+	public void removeParameterItem(@NonNull IParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 		parameterItems.remove(parameterItem.getLabel(), parameterItem);
 	}
