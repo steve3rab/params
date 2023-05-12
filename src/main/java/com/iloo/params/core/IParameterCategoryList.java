@@ -2,19 +2,10 @@ package com.iloo.params.core;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 /**
  * This interface represents a list of parameter categories.
  */
 public interface IParameterCategoryList {
-
-	/**
-	 * Removes a parameter category from the list.
-	 *
-	 * @param parameterCategory the parameter category to remove
-	 */
-	void removeParameterCategory(@NonNull IParameterCategory parameterCategory);
 
 	/**
 	 * Returns the list of parameter categories.

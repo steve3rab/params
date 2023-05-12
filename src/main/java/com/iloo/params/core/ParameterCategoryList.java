@@ -2,7 +2,6 @@ package com.iloo.params.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -30,16 +29,6 @@ class ParameterCategoryList implements IParameterCategoryList {
 	 */
 	void addParameterCategory(@NonNull IParameterCategory parameterCategory) {
 		categoryList.add(parameterCategory);
-	}
-
-	/**
-	 * Removes a parameter category from the list.
-	 *
-	 * @param parameterCategory the parameter category to remove
-	 */
-	@Override
-	public void removeParameterCategory(@NonNull IParameterCategory parameterCategory) {
-		categoryList.remove(Objects.requireNonNull(parameterCategory, "Parameter category cannot be null"));
 	}
 
 	/**
