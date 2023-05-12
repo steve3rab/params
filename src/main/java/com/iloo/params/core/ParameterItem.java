@@ -1,7 +1,5 @@
 package com.iloo.params.core;
 
-import java.nio.file.Path;
-import java.util.Date;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -42,26 +40,9 @@ class ParameterItem<T> implements IParameterItem<T> {
 	 *                                       Number, Date, or Path.
 	 */
 	ParameterItem(@NonNull String label, @NonNull T value, boolean active) {
-		this.label = Objects.requireNonNull(label, "Label cannot be null");
-		this.value = validateValueType(Objects.requireNonNull(value, "Value cannot be null"));
+		this.label = label;
+		this.value = ParameterItemValueValidator.validateValueType(value);
 		this.active = active;
-	}
-
-	/**
-	 * Validates that the given value is of type String, Number, Date, or Path.
-	 *
-	 * @param value the value to validate.
-	 * @return the value
-	 * @throws NullPointerException          if value is {@code null}.
-	 * @throws InvalidParameterItemException if the value is not of type String,
-	 *                                       Number, Date, or Path.
-	 */
-	private T validateValueType(@NonNull T value) {
-		if (!((value instanceof String) || (value instanceof Number) || (value instanceof Date)
-				|| (value instanceof Path))) {
-			throw InvalidParameterItemException.forInvalidValueType();
-		}
-		return value;
 	}
 
 	/**

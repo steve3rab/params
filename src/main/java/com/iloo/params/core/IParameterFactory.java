@@ -24,4 +24,11 @@ public sealed interface IParameterFactory permits ParameterFactory {
 	 * @return a new parameter item.
 	 */
 	<T> IParameterItem<T> createParameterItem(String label, T value, boolean active);
+
+	/**
+	 * Gets the list of parameter categories.
+	 *
+	 * @return the {@link IParameterCategoryList}
+	 */
+	IParameterCategoryList getParameterCategoryList();
 }
