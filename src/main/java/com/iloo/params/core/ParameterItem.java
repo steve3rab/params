@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.iloo.params.exceptions.InvalidParameterItemException;
+import com.iloo.params.utils.VoidResult;
 
 /**
  * Represents a parameter item with a label, value, and active status.
@@ -69,10 +70,13 @@ class ParameterItem<T> implements IParameterItem<T> {
 	 * Sets the active status of this item.
 	 *
 	 * @param active {@code true} if this item is active, {@code false} otherwise.
+	 * @return {@code VoidResult}
 	 */
 	@Override
-	public void setActive(boolean active) {
+	public VoidResult setActive(boolean active) {
 		this.active = active;
+
+		return VoidResult.ok();
 	}
 
 	/**

@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.iloo.params.exceptions.InvalidParameterCategoryException;
+import com.iloo.params.utils.VoidResult;
 
 /**
  * Represents a category of parameters.
@@ -68,10 +69,11 @@ class ParameterCategory implements IParameterCategory {
 	 * Adds a parameter item to this category.
 	 *
 	 * @param parameterItem the parameter item to put.
+	 * @return {@code VoidResult}
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
 	@Override
-	public void addParameterItem(@NonNull IParameterItem<?> parameterItem) {
+	public VoidResult addParameterItem(@NonNull IParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 
 		parameterItems.computeIfPresent(parameterItem.getLabel(), (lbl, existingItem) -> {
@@ -80,18 +82,22 @@ class ParameterCategory implements IParameterCategory {
 		});
 
 		parameterItems.put(parameterItem.getLabel(), parameterItem);
+		return VoidResult.ok();
 	}
 
 	/**
 	 * Remove a parameter item to this category.
 	 *
 	 * @param parameterItem the parameter item to put.
+	 * @return {@code VoidResult}
 	 * @throws NullPointerException if the parameter item is {@code null}.
 	 */
 	@Override
-	public void removeParameterItem(@NonNull IParameterItem<?> parameterItem) {
+	public VoidResult removeParameterItem(@NonNull IParameterItem<?> parameterItem) {
 		Objects.requireNonNull(parameterItem, "Parameter item cannot be null");
 		parameterItems.remove(parameterItem.getLabel(), parameterItem);
+
+		return VoidResult.ok();
 	}
 
 	/**
@@ -140,11 +146,14 @@ class ParameterCategory implements IParameterCategory {
 	 * Sets the child category of this category.
 	 *
 	 * @param childCategory the child category of this category.
+	 * @return {@code VoidResult}
 	 */
 	@Override
-	public void setChildCategory(@NonNull IParameterCategory childCategory) {
+	public VoidResult setChildCategory(@NonNull IParameterCategory childCategory) {
 		childCategory.setParentCategory(this);
 		this.childCategoryList.add(childCategory);
+
+		return VoidResult.ok();
 	}
 
 	/**
@@ -152,12 +161,15 @@ class ParameterCategory implements IParameterCategory {
 	 *
 	 * @param parentCategory the parent category of this category.
 	 * @throws NullPointerException if {@link ParameterCategory} is {@code null}.
+	 * @return {@code VoidResult}
 	 */
 	@Override
-	public void setParentCategory(@NonNull IParameterCategory parentCategory) {
+	public VoidResult setParentCategory(@NonNull IParameterCategory parentCategory) {
 		setSubCategory(parentCategory);
 		ParameterCategory parameterCategory = (ParameterCategory) parentCategory;
 		parameterCategory.getDirectChildCategoryList().add(this);
+
+		return VoidResult.ok();
 	}
 
 	private void setSubCategory(IParameterCategory subCategory) {

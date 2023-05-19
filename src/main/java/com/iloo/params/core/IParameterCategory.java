@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.iloo.params.utils.VoidResult;
+
 /**
  *
  * This interface represents a parameter category, which can contain parameter
@@ -37,16 +39,18 @@ public interface IParameterCategory {
 	 * Adds a parameter item to the category.
 	 *
 	 * @param parameterItem the parameter item to add
+	 * @return {@code VoidResult}
 	 */
-	void addParameterItem(@NonNull IParameterItem<?> parameterItem);
+	VoidResult addParameterItem(@NonNull IParameterItem<?> parameterItem);
 
 	/**
 	 *
 	 * Removes a parameter item from the category.
 	 *
 	 * @param parameterItem the parameter item to remove
+	 * @return {@code VoidResult}
 	 */
-	void removeParameterItem(@NonNull IParameterItem<?> parameterItem);
+	VoidResult removeParameterItem(@NonNull IParameterItem<?> parameterItem);
 
 	/**
 	 *
@@ -71,16 +75,18 @@ public interface IParameterCategory {
 	 * Sets the child category of this category.
 	 *
 	 * @param childCategory the child category to set
+	 * @return {@code VoidResult}
 	 */
-	void setChildCategory(@NonNull IParameterCategory childCategory);
+	VoidResult setChildCategory(@NonNull IParameterCategory childCategory);
 
 	/**
 	 *
 	 * Sets the parent category of this category.
 	 *
 	 * @param parentCategory the parent category to set
+	 * @return {@code VoidResult}
 	 */
-	void setParentCategory(@NonNull IParameterCategory parentCategory);
+	VoidResult setParentCategory(@NonNull IParameterCategory parentCategory);
 
 	/**
 	 *
