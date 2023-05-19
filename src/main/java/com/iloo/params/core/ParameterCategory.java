@@ -1,5 +1,6 @@
 package com.iloo.params.core;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -294,6 +296,24 @@ class ParameterCategory implements IParameterCategory {
 		allParameterItems.putAll(parameterItems);
 		return allParameterItems.entrySet().stream().collect(
 				Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue, (existingItem, newItem) -> newItem));
+	}
+
+	/**
+	 * Traverses the category and its descendants, applying the provided predicate
+	 * to filter the ParameterCategory items, and returns a list of the matching
+	 * items.
+	 *
+	 * @param predicate the predicate to filter the ParameterCategory items.
+	 * @return a list of ParameterCategory items that match the predicate.
+	 */
+	@Override
+	public List<IParameterCategory> traverse(Predicate<IParameterCategory> predicate) {
+		List<IParameterCategory> resultList = new ArrayList<>();
+		if (predicate.test(this)) {
+			resultList.add(this);
+		}
+		childCategoryList.forEach(childCategory -> resultList.addAll(childCategory.traverse(predicate)));
+		return resultList;
 	}
 
 	@Override
