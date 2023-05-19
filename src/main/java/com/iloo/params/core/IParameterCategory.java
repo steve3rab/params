@@ -3,8 +3,11 @@ package com.iloo.params.core;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNull;
+
+import com.iloo.params.utils.VoidResult;
 
 /**
  *
@@ -37,16 +40,18 @@ public interface IParameterCategory {
 	 * Adds a parameter item to the category.
 	 *
 	 * @param parameterItem the parameter item to add
+	 * @return {@code VoidResult}
 	 */
-	void addParameterItem(@NonNull IParameterItem<?> parameterItem);
+	VoidResult addParameterItem(@NonNull IParameterItem<?> parameterItem);
 
 	/**
 	 *
 	 * Removes a parameter item from the category.
 	 *
 	 * @param parameterItem the parameter item to remove
+	 * @return {@code VoidResult}
 	 */
-	void removeParameterItem(@NonNull IParameterItem<?> parameterItem);
+	VoidResult removeParameterItem(@NonNull IParameterItem<?> parameterItem);
 
 	/**
 	 *
@@ -71,16 +76,18 @@ public interface IParameterCategory {
 	 * Sets the child category of this category.
 	 *
 	 * @param childCategory the child category to set
+	 * @return {@code VoidResult}
 	 */
-	void setChildCategory(@NonNull IParameterCategory childCategory);
+	VoidResult setChildCategory(@NonNull IParameterCategory childCategory);
 
 	/**
 	 *
 	 * Sets the parent category of this category.
 	 *
 	 * @param parentCategory the parent category to set
+	 * @return {@code VoidResult}
 	 */
-	void setParentCategory(@NonNull IParameterCategory parentCategory);
+	VoidResult setParentCategory(@NonNull IParameterCategory parentCategory);
 
 	/**
 	 *
@@ -145,4 +152,14 @@ public interface IParameterCategory {
 	 *         category
 	 */
 	Map<String, IParameterItem<?>> getAllParentParameterItems();
+
+	/**
+	 * Traverses the category and its descendants, applying the provided predicate
+	 * to filter the ParameterCategory items, and returns a list of the matching
+	 * items.
+	 *
+	 * @param predicate the predicate to filter the ParameterCategory items.
+	 * @return a list of ParameterCategory items that match the predicate.
+	 */
+	List<IParameterCategory> traverse(Predicate<IParameterCategory> predicate);
 }

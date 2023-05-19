@@ -220,4 +220,34 @@ class ParameterIT {
 		assertEquals("Value_parameter6", String.valueOf(parameters.get("Label_parameter1").getValue()));
 	}
 
+	@ParameterizedTest
+	@CsvSource({ "Label 1, Description 1" })
+	@DisplayName("Test a category parameter traversal")
+	void testParameterItemCategoryTraversal(String label, String description) {
+		IParameterCategory category1 = factory.createParameterCategory(label, description);
+		category1.addParameterItem(factory.createParameterItem("Label_parameter1", "Value_parameter1", false));
+		category1.addParameterItem(factory.createParameterItem("Label_parameter2", "Value_parameter2", false));
+		category1.addParameterItem(factory.createParameterItem("Label_parameter3", "Value_parameter3", false));
+
+		IParameterCategory category2 = factory.createParameterCategory("Label_category2", "Description_category2");
+		category2.addParameterItem(factory.createParameterItem("Label_parameter4", "Value_parameter4", false));
+		category2.setParentCategory(category1);
+
+		IParameterCategory category3 = factory.createParameterCategory("Label_category3", "Description_category3");
+		category3.addParameterItem(factory.createParameterItem("Label_parameter1", "Value_parameter6", false));
+		category3.addParameterItem(factory.createParameterItem("Label_parameter5", "Value_parameter5", false));
+		category3.setParentCategory(category2);
+
+		List<IParameterCategory> leafCategories = category1.traverse(IParameterCategory::isLeaf);
+		assertEquals(List.of(category3), leafCategories);
+
+		List<IParameterCategory> categoriesWithKeyword = category1
+				.traverse(c -> c.getDescription().contains("Description_category3"));
+		assertEquals(List.of(category3), categoriesWithKeyword);
+
+		final int targetLevel = 2;
+		List<IParameterCategory> categoriesAtLevel = category1.traverse(c -> c.getLevel().getVertical() == targetLevel);
+		assertEquals(List.of(category2), categoriesAtLevel);
+	}
+
 }
