@@ -299,20 +299,46 @@ class ParameterCategory implements IParameterCategory {
 	}
 
 	/**
-	 * Traverses the category and its descendants, applying the provided predicate
-	 * to filter the ParameterCategory items, and returns a list of the matching
-	 * items.
+	 * Performs a Depth-First Search (DFS) traversal on the category and its
+	 * descendants, applying the provided predicate to filter the ParameterCategory
+	 * items, and returns a list of the matching items.
 	 *
 	 * @param predicate the predicate to filter the ParameterCategory items.
 	 * @return a list of ParameterCategory items that match the predicate.
 	 */
 	@Override
-	public List<IParameterCategory> traverse(Predicate<IParameterCategory> predicate) {
+	public List<IParameterCategory> depthFirstSearch(Predicate<IParameterCategory> predicate) {
 		List<IParameterCategory> resultList = new ArrayList<>();
 		if (predicate.test(this)) {
 			resultList.add(this);
 		}
-		childCategoryList.forEach(childCategory -> resultList.addAll(childCategory.traverse(predicate)));
+		childCategoryList.forEach(childCategory -> resultList.addAll(childCategory.depthFirstSearch(predicate)));
+
+		return resultList;
+	}
+
+	/**
+	 * Performs a Breadth-First Search (BFS) traversal on the category and its
+	 * descendants, applying the provided predicate to filter the ParameterCategory
+	 * items, and returns a list of the matching items.
+	 *
+	 * @param predicate the predicate to filter the ParameterCategory items.
+	 * @return a list of ParameterCategory items that match the predicate.
+	 */
+	@Override
+	public List<IParameterCategory> breadthFirstSearch(Predicate<IParameterCategory> predicate) {
+		List<IParameterCategory> resultList = new ArrayList<>();
+		List<IParameterCategory> queue = new ArrayList<>();
+		queue.add(this);
+
+		while (!queue.isEmpty()) {
+			IParameterCategory category = queue.remove(0);
+			if (predicate.test(category)) {
+				resultList.add(category);
+			}
+			queue.addAll(category.getChildCategoryList());
+		}
+
 		return resultList;
 	}
 

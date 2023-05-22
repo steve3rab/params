@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -238,16 +239,21 @@ class ParameterIT {
 		category3.addParameterItem(factory.createParameterItem("Label_parameter5", "Value_parameter5", false));
 		category3.setParentCategory(category2);
 
-		List<IParameterCategory> leafCategories = category1.traverse(IParameterCategory::isLeaf);
+		List<IParameterCategory> leafCategories = category1.depthFirstSearch(IParameterCategory::isLeaf);
 		assertEquals(List.of(category3), leafCategories);
 
 		List<IParameterCategory> categoriesWithKeyword = category1
-				.traverse(c -> c.getDescription().contains("Description_category3"));
+				.depthFirstSearch(c -> c.getDescription().contains("Description_category3"));
 		assertEquals(List.of(category3), categoriesWithKeyword);
 
 		final int targetLevel = 2;
-		List<IParameterCategory> categoriesAtLevel = category1.traverse(c -> c.getLevel().getVertical() == targetLevel);
+		List<IParameterCategory> categoriesAtLevel = category1
+				.depthFirstSearch(c -> c.getLevel().getVertical() == targetLevel);
 		assertEquals(List.of(category2), categoriesAtLevel);
+
+		Predicate<IParameterCategory> predicate = cat -> cat.getLabel().endsWith("category3");
+		List<IParameterCategory> matchingCategories = category1.breadthFirstSearch(predicate);
+		assertEquals(List.of(category3), matchingCategories);
 	}
 
 }

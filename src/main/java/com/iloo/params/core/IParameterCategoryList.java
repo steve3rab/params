@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * This interface represents a list of parameter categories.
  */
-public interface IParameterCategoryList {
+public sealed interface IParameterCategoryList permits ParameterCategoryList {
 
 	/**
 	 * Returns the list of parameter categories.

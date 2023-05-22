@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 /**
  * Represents a list of parameter categories.
  */
-class ParameterCategoryList implements IParameterCategoryList {
+final class ParameterCategoryList implements IParameterCategoryList {
 
 	/**
 	 * A list of {@link IParameterCategory}.
