@@ -154,12 +154,22 @@ public interface IParameterCategory {
 	Map<String, IParameterItem<?>> getAllParentParameterItems();
 
 	/**
-	 * Traverses the category and its descendants, applying the provided predicate
-	 * to filter the ParameterCategory items, and returns a list of the matching
-	 * items.
+	 * Performs a Depth-First Search (DFS) traversal on the category and its
+	 * descendants, applying the provided predicate to filter the ParameterCategory
+	 * items, and returns a list of the matching items.
 	 *
 	 * @param predicate the predicate to filter the ParameterCategory items.
 	 * @return a list of ParameterCategory items that match the predicate.
 	 */
-	List<IParameterCategory> traverse(Predicate<IParameterCategory> predicate);
+	List<IParameterCategory> depthFirstSearch(Predicate<IParameterCategory> predicate);
+
+	/**
+	 * Performs a Breadth-First Search (BFS) traversal on the category and its
+	 * descendants, applying the provided predicate to filter the ParameterCategory
+	 * items, and returns a list of the matching items.
+	 *
+	 * @param predicate the predicate to filter the ParameterCategory items.
+	 * @return a list of ParameterCategory items that match the predicate.
+	 */
+	List<IParameterCategory> breadthFirstSearch(Predicate<IParameterCategory> predicate);
 }
