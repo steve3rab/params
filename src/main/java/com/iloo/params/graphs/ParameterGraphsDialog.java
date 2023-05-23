@@ -27,27 +27,27 @@ public class ParameterGraphsDialog extends Application {
 	/**
 	 * Chart width.
 	 */
-	private static final double CHARTWIDTH = 600.0d;
+	private static final double CHART_WIDTH = 600.0;
 
 	/**
 	 * Chart height.
 	 */
-	private static final double CHARTHEIGHT = 400.0d;
+	private static final double CHART_HEIGHT = 400.0;
 
 	/**
 	 * Chart minimum scale.
 	 */
-	private static final double MINSCALE = 0.1d;
+	private static final double MIN_SCALE = 0.1;
 
 	/**
 	 * Chart maximum scale.
 	 */
-	private static final double MAXSCALE = 10.0d;
+	private static final double MAX_SCALE = 10.0;
 
 	/**
 	 * Chart scale delta.
 	 */
-	private static final double SCALEDELTA = 1.1d;
+	private static final double SCALE_DELTA = 1.1;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -56,17 +56,13 @@ public class ParameterGraphsDialog extends Application {
 
 		// Create the root node
 		StackPane ceoStackPane = createCircle("CEO");
-		StackPane employee1StackPane = createCircle("Employee 1");
-		StackPane employee2StackPane = createCircle("Employee 2");
-		StackPane employee3StackPane = createCircle("Employee 3");
-		StackPane employee4StackPane = createCircle("Employee 4");
-		StackPane employee5StackPane = createCircle("Employee 5");
-		StackPane employee6StackPane = createCircle("Employee 6");
-		Group group = createChart(ceoStackPane, List.of(employee1StackPane, employee2StackPane, employee3StackPane,
-				employee4StackPane, employee5StackPane, employee6StackPane));
+		List<StackPane> children = List.of(createCircle("Employee 1"), createCircle("Employee 2"),
+				createCircle("Employee 3"), createCircle("Employee 4"), createCircle("Employee 5"),
+				createCircle("Employee 6"));
+		Group group = createChart(ceoStackPane, children);
 
 		// Create the scene with a minimum size
-		Scene scene = new Scene(root, CHARTWIDTH, CHARTHEIGHT);
+		Scene scene = new Scene(root, CHART_WIDTH, CHART_HEIGHT);
 
 		// Enable zooming using mouse scroll
 		enableZoom(scene, group);
@@ -96,26 +92,33 @@ public class ParameterGraphsDialog extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * Creates the organizational chart with the given parent and children nodes.
+	 *
+	 * @param parent   The parent node.
+	 * @param children The list of children nodes.
+	 * @return The Group containing the organizational chart.
+	 */
 	private Group createChart(StackPane parent, List<StackPane> children) {
 		Group group = new Group();
 
 		Circle parentCircle = (Circle) parent.getChildren().get(0);
-		parent.setLayoutX(CHARTWIDTH / 2);
-		parent.setLayoutY(CHARTHEIGHT / 2);
+		parent.setLayoutX(CHART_WIDTH / 2);
+		parent.setLayoutY(CHART_HEIGHT / 2);
 
 		group.getChildren().add(parent);
 
-		double childOffsetX = (parentCircle.getRadius() + 50.0d) * 2;
-		double childOffsetY = (parentCircle.getRadius() + 50.0d);
+		double childOffsetX = (parentCircle.getRadius() + 50.0) * 2;
+		double childOffsetY = (parentCircle.getRadius() + 50.0);
 
 		for (int i = 0; i < children.size(); i++) {
 			StackPane child = children.get(i);
 
 			double childLayoutX;
 			if (i < (children.size() / 2)) {
-				childLayoutX = parent.getLayoutX() - (((children.size() / 2.0d) - i) * childOffsetX);
+				childLayoutX = parent.getLayoutX() - (((children.size() / 2.0) - i) * childOffsetX);
 			} else {
-				childLayoutX = parent.getLayoutX() + ((i - (children.size() / 2.0d)) * childOffsetX);
+				childLayoutX = parent.getLayoutX() + ((i - (children.size() / 2.0)) * childOffsetX);
 			}
 
 			double childLayoutY = parent.getLayoutY() + childOffsetY;
@@ -132,8 +135,14 @@ public class ParameterGraphsDialog extends Application {
 		return group;
 	}
 
+	/**
+	 * Creates a StackPane representing a circle node with the given text.
+	 *
+	 * @param text The text to display inside the circle.
+	 * @return The StackPane representing the circle node.
+	 */
 	private StackPane createCircle(String text) {
-		final double radius = 40.0d;
+		final double radius = 40.0;
 
 		Circle circle = new Circle(radius);
 		circle.setFill(Color.BLUE);
@@ -155,6 +164,13 @@ public class ParameterGraphsDialog extends Application {
 		return stackPane;
 	}
 
+	/**
+	 * Creates tangent lines between the source and target nodes.
+	 *
+	 * @param source The source node.
+	 * @param target The target node.
+	 * @return The Line representing the tangent lines.
+	 */
 	private Line createTangentLines(StackPane source, StackPane target) {
 		Circle sourceCircle = (Circle) source.getChildren().get(0);
 		Circle targetCircle = (Circle) target.getChildren().get(0);
@@ -178,11 +194,17 @@ public class ParameterGraphsDialog extends Application {
 		return new Line(sourceX, sourceY, targetX, targetY);
 	}
 
+	/**
+	 * Enables zooming of the chart using mouse scroll.
+	 *
+	 * @param scene The Scene to enable zooming on.
+	 * @param group The Group representing the chart.
+	 */
 	private void enableZoom(Scene scene, Group group) {
 		scene.addEventFilter(ScrollEvent.ANY, event -> {
 			event.consume();
 
-			double scaleFactor = (event.getDeltaY() > 0) ? SCALEDELTA : 1 / SCALEDELTA;
+			double scaleFactor = (event.getDeltaY() > 0) ? SCALE_DELTA : 1 / SCALE_DELTA;
 
 			Bounds groupBounds = group.getLayoutBounds();
 			double groupCenterX = (groupBounds.getMinX() + groupBounds.getMaxX()) / 2;
@@ -192,16 +214,22 @@ public class ParameterGraphsDialog extends Application {
 
 			// Ensure the scale stays within the defined limits
 			double currentScale = group.getScaleX();
-			if (currentScale < MINSCALE) {
+			if (currentScale < MIN_SCALE) {
 				group.getTransforms()
-						.add(new Scale(MINSCALE / currentScale, MINSCALE / currentScale, groupCenterX, groupCenterY));
-			} else if (currentScale > MAXSCALE) {
+						.add(new Scale(MIN_SCALE / currentScale, MIN_SCALE / currentScale, groupCenterX, groupCenterY));
+			} else if (currentScale > MAX_SCALE) {
 				group.getTransforms()
-						.add(new Scale(MAXSCALE / currentScale, MAXSCALE / currentScale, groupCenterX, groupCenterY));
+						.add(new Scale(MAX_SCALE / currentScale, MAX_SCALE / currentScale, groupCenterX, groupCenterY));
 			}
 		});
 	}
 
+	/**
+	 * Creates a Button that resets the zoom of the chart.
+	 *
+	 * @param group The Group representing the chart.
+	 * @return The Button that resets the zoom.
+	 */
 	private Button createResetButton(Group group) {
 		Button resetButton = new Button("Reset Zoom");
 		resetButton.setOnAction(event -> group.getTransforms().clear());
