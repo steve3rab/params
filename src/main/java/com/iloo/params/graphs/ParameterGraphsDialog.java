@@ -1,5 +1,7 @@
 package com.iloo.params.graphs;
 
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
@@ -53,37 +55,15 @@ public class ParameterGraphsDialog extends Application {
 		StackPane root = new StackPane();
 
 		// Create the root node
-		Group group = new Group();
-
-		// Create nodes for the org chart
-		StackPane ceoStackPane = createCircle(40, "CEO");
-		Circle ceoCircle = (Circle) ceoStackPane.getChildren().get(0);
-		StackPane managerStackPane = createCircle(40, "Manager");
-		Circle managerCircle = (Circle) managerStackPane.getChildren().get(0);
-		StackPane employee1StackPane = createCircle(40, "Employee 1");
-		StackPane employee2StackPane = createCircle(40, "Employee 2");
-
-		ceoStackPane.setLayoutX(CHARTWIDTH / 2);
-		ceoStackPane.setLayoutY(CHARTHEIGHT / 2);
-
-		managerStackPane.setLayoutX(ceoStackPane.getLayoutX() + ceoCircle.getRadius() + 50);
-		managerStackPane.setLayoutY(ceoStackPane.getLayoutY());
-
-		employee1StackPane.setLayoutX(managerStackPane.getLayoutX() - managerCircle.getRadius() - 50);
-		employee1StackPane.setLayoutY(managerStackPane.getLayoutY() + managerCircle.getRadius() + 50);
-
-		employee2StackPane.setLayoutX(managerStackPane.getLayoutX() + managerCircle.getRadius() + 50);
-		employee2StackPane.setLayoutY(managerStackPane.getLayoutY() + managerCircle.getRadius() + 50);
-
-		// Add the nodes to the root node
-		group.getChildren().addAll(ceoStackPane, managerStackPane, employee1StackPane, employee2StackPane);
-
-		// Create lines connecting the circles
-		Line line1 = createTangentLines(ceoStackPane, managerStackPane);
-		Line line2 = createTangentLines(managerStackPane, employee1StackPane);
-		Line line3 = createTangentLines(managerStackPane, employee2StackPane);
-
-		group.getChildren().addAll(line1, line2, line3);
+		StackPane ceoStackPane = createCircle("CEO");
+		StackPane employee1StackPane = createCircle("Employee 1");
+		StackPane employee2StackPane = createCircle("Employee 2");
+		StackPane employee3StackPane = createCircle("Employee 3");
+		StackPane employee4StackPane = createCircle("Employee 4");
+		StackPane employee5StackPane = createCircle("Employee 5");
+		StackPane employee6StackPane = createCircle("Employee 6");
+		Group group = createChart(ceoStackPane, List.of(employee1StackPane, employee2StackPane, employee3StackPane,
+				employee4StackPane, employee5StackPane, employee6StackPane));
 
 		// Create the scene with a minimum size
 		Scene scene = new Scene(root, CHARTWIDTH, CHARTHEIGHT);
@@ -116,7 +96,45 @@ public class ParameterGraphsDialog extends Application {
 		primaryStage.show();
 	}
 
-	private StackPane createCircle(double radius, String text) {
+	private Group createChart(StackPane parent, List<StackPane> children) {
+		Group group = new Group();
+
+		Circle parentCircle = (Circle) parent.getChildren().get(0);
+		parent.setLayoutX(CHARTWIDTH / 2);
+		parent.setLayoutY(CHARTHEIGHT / 2);
+
+		group.getChildren().add(parent);
+
+		double childOffsetX = (parentCircle.getRadius() + 50.0d) * 2;
+		double childOffsetY = (parentCircle.getRadius() + 50.0d);
+
+		for (int i = 0; i < children.size(); i++) {
+			StackPane child = children.get(i);
+
+			double childLayoutX;
+			if (i < (children.size() / 2)) {
+				childLayoutX = parent.getLayoutX() - (((children.size() / 2.0d) - i) * childOffsetX);
+			} else {
+				childLayoutX = parent.getLayoutX() + ((i - (children.size() / 2.0d)) * childOffsetX);
+			}
+
+			double childLayoutY = parent.getLayoutY() + childOffsetY;
+
+			child.setLayoutX(childLayoutX);
+			child.setLayoutY(childLayoutY);
+
+			group.getChildren().add(child);
+
+			Line line = createTangentLines(parent, child);
+			group.getChildren().add(line);
+		}
+
+		return group;
+	}
+
+	private StackPane createCircle(String text) {
+		final double radius = 40.0d;
+
 		Circle circle = new Circle(radius);
 		circle.setFill(Color.BLUE);
 
