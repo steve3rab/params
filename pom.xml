@@ -29,6 +29,7 @@
 		<log4j.version>2.20.0</log4j.version>
 		<eclipse-jdt-annotation.version>2.2.700</eclipse-jdt-annotation.version>
 		<jupiter.version>5.8.2</jupiter.version>
+		<javafx.version>20.0.1</javafx.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,6 +46,16 @@
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>org.eclipse.jdt.annotation</artifactId>
 			<version>${eclipse-jdt-annotation.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>${javafx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
