@@ -1,14 +1,17 @@
-package com.iloo.params.graphs;
+package com.iloo.params.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javafx.application.Application;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.iloo.params.model.ParameterGraphsModel;
+import com.iloo.params.view.ParameterGraphsView;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
@@ -16,23 +19,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 /**
- * A dialog to view the parameter structure.
+ * Controller class for managing parameter graphs.
  */
-public class ParameterGraphsDialog extends Application {
-
-	/**
-	 * Chart width.
-	 */
-	private static final double CHART_WIDTH = 600.0;
-
-	/**
-	 * Chart height.
-	 */
-	private static final double CHART_HEIGHT = 400.0;
+public class ParameterGraphsController {
 
 	/**
 	 * Chart minimum scale.
@@ -49,56 +40,51 @@ public class ParameterGraphsDialog extends Application {
 	 */
 	private static final double SCALE_DELTA = 1.1;
 
-	@Override
-	public void start(Stage primaryStage) {
-		// Create the root StackPane
-		StackPane root = new StackPane();
+	/**
+	 * Chart width.
+	 */
+	private static final double CHART_WIDTH = 600.0;
 
-		// Create the root node
-		StackPane ceoStackPane = createCircle("CEO");
-		List<StackPane> children = List.of(createCircle("Employee 1"), createCircle("Employee 2"),
-				createCircle("Employee 3"), createCircle("Employee 4"), createCircle("Employee 5"),
-				createCircle("Employee 6"));
-		Group group = createChart(ceoStackPane, children);
+	/**
+	 * Chart height.
+	 */
+	private static final double CHART_HEIGHT = 400.0;
 
-		Button resetButton = createResetButton(group);
+	private final ParameterGraphsModel model;
+	private final ParameterGraphsView view;
 
-		// Set the content Group as the child of the root StackPane
-		StackPane.setAlignment(resetButton, Pos.TOP_LEFT);
-		StackPane.setAlignment(group, Pos.CENTER);
-		root.getChildren().addAll(resetButton, group);
-
-		// Create the scene with a minimum size
-		Scene scene = new Scene(root, CHART_WIDTH, CHART_HEIGHT);
-
-		// Enable zooming using mouse scroll
-		enableZoom(scene, group);
-
-		// Set the stage title and scene
-		primaryStage.setTitle("Hierarchical Org Chart Example");
-		primaryStage.setScene(scene);
-		primaryStage.setAlwaysOnTop(true);
-
-		// Set the minimum stage size to match the default scene size
-		primaryStage.setMinWidth(scene.getWidth());
-		primaryStage.setMinHeight(scene.getHeight());
-
-		// Set the maximum stage size to match the computer resolution
-		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-		primaryStage.setMaxWidth(screenBounds.getWidth());
-		primaryStage.setMaxHeight(screenBounds.getHeight());
-
-		// Show the stage
-		primaryStage.show();
+	/**
+	 * Constructs a new instance of ParameterGraphsController.
+	 */
+	public ParameterGraphsController(@NonNull ParameterGraphsModel model, @NonNull ParameterGraphsView view) {
+		this.model = model;
+		this.view = view;
 	}
 
 	/**
-	 * Creates the organizational chart with the given parent and children nodes.
-	 *
-	 * @param parent   The parent node.
-	 * @param children The list of children nodes.
-	 * @return The Group containing the organizational chart.
+	 * Initializes the parameter graphs controller. This method should be called
+	 * after setting the model and view.
 	 */
+	public void initialize() {
+		if ((model != null) && (view != null)) {
+			model.setEmployees(new ArrayList<>());
+			model.getEmployees().add("Employee 0");
+			model.getEmployees().add("Employee 1");
+
+			updateView();
+		}
+	}
+
+	private void updateView() {
+		List<StackPane> children = new ArrayList<>();
+		for (String employee : model.getEmployees()) {
+			children.add(createCircle(employee));
+		}
+
+		Group chartGroup = createChart(createCircle("CEO"), children);
+		view.getChartGroup().getChildren().setAll(chartGroup);
+	}
+
 	private Group createChart(StackPane parent, List<StackPane> children) {
 		Group group = new Group();
 
@@ -135,12 +121,6 @@ public class ParameterGraphsDialog extends Application {
 		return group;
 	}
 
-	/**
-	 * Creates a StackPane representing a circle node with the given text.
-	 *
-	 * @param text The text to display inside the circle.
-	 * @return The StackPane representing the circle node.
-	 */
 	private StackPane createCircle(String text) {
 		final double radius = 40.0;
 
@@ -164,13 +144,6 @@ public class ParameterGraphsDialog extends Application {
 		return stackPane;
 	}
 
-	/**
-	 * Creates tangent lines between the source and target nodes.
-	 *
-	 * @param source The source node.
-	 * @param target The target node.
-	 * @return The Line representing the tangent lines.
-	 */
 	private Line createTangentLines(StackPane source, StackPane target) {
 		Circle sourceCircle = (Circle) source.getChildren().get(0);
 		Circle targetCircle = (Circle) target.getChildren().get(0);
@@ -200,7 +173,7 @@ public class ParameterGraphsDialog extends Application {
 	 * @param scene The Scene to enable zooming on.
 	 * @param group The Group representing the chart.
 	 */
-	private void enableZoom(Scene scene, Group group) {
+	public void enableZoom(Scene scene, Group group) {
 		scene.addEventFilter(ScrollEvent.ANY, event -> {
 			event.consume();
 
@@ -225,16 +198,18 @@ public class ParameterGraphsDialog extends Application {
 	}
 
 	/**
-	 * Creates a Button that resets the zoom of the chart.
-	 *
-	 * @param group The Group representing the chart.
-	 * @return The Button that resets the zoom.
+	 * Resets the zoom of the chart.
 	 */
-	private Button createResetButton(Group group) {
-		Button resetButton = new Button("Reset Zoom");
-		resetButton.setOnAction(event -> group.getTransforms().clear());
-		resetButton.setTranslateX(10);
-		resetButton.setTranslateY(10);
-		return resetButton;
+	public void resetZoom() {
+		view.getChartGroup().getTransforms().clear();
 	}
+
+	public static double getChartWidth() {
+		return CHART_WIDTH;
+	}
+
+	public static double getChartHeight() {
+		return CHART_HEIGHT;
+	}
+
 }

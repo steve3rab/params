@@ -1,4 +1,4 @@
-package com.iloo.params.graphs;
+package com.iloo.params.dialog;
 
 import javafx.application.Application;
 
