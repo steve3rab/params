@@ -29,13 +29,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+        
+      - name: step 3 - Build and test paramsAPI module
+        working-directory: paramsAPI
+        run: mvn clean verify -Dtest=*IT
 
-      - name: step 3 - Build and test project
+      - name: step 4 - Build and test paramsUI module
+        working-directory: paramsUI
         run: mvn clean verify -Dtest=*IT
         
-      - name: step 4 - Upload code coverage reports
+      - name: step 5 - Upload code coverage reports
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
-          path: target/site/jacoco/index.html
+          path: paramsAPI/target/site/jacoco/index.html
         

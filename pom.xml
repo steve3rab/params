@@ -7,7 +7,7 @@
 	<groupId>com.iloo</groupId>
 	<artifactId>params</artifactId>
 	<version>2.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>Parameters Managers</name>
 	<description>A sample Maven project for managing parameters structures</description>
@@ -28,9 +28,8 @@
 		<java.version>17</java.version>
 		<log4j.version>2.20.0</log4j.version>
 		<eclipse-jdt-annotation.version>2.2.700</eclipse-jdt-annotation.version>
-		<jupiter.version>5.8.2</jupiter.version>
-		<javafx.version>20.0.1</javafx.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -47,35 +46,13 @@
 			<artifactId>org.eclipse.jdt.annotation</artifactId>
 			<version>${eclipse-jdt-annotation.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-graphics</artifactId>
-			<version>${javafx.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-fxml</artifactId>
-			<version>${javafx.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>${jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
+
+	<modules>
+		<module>paramsAPI</module>
+		<module>paramsUI</module>
+	</modules>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -84,14 +61,6 @@
 				<version>3.11.0</version>
 				<configuration>
 					<release>${java.version}</release>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<test>**/*IT.java</test>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -155,24 +124,27 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
-			<id>dev</id>
-			<properties>
-				<activatedProperties>dev</activatedProperties>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			<id>build-paramsAPI</id>
+			<modules>
+				<module>paramsAPI</module>
+			</modules>
 		</profile>
 		<profile>
-			<id>prod</id>
-			<properties>
-				<activatedProperties>prod</activatedProperties>
-			</properties>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
+			<id>build-paramsUI</id>
+			<modules>
+				<module>paramsUI</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>assemble-modules</id>
+			<modules>
+				<module>paramsAPI</module>
+				<module>paramsUI</module>
+			</modules>
 		</profile>
 	</profiles>
+
 </project>

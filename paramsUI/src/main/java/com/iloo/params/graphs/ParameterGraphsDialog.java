@@ -61,18 +61,18 @@ public class ParameterGraphsDialog extends Application {
 				createCircle("Employee 6"));
 		Group group = createChart(ceoStackPane, children);
 
+		Button resetButton = createResetButton(group);
+
+		// Set the content Group as the child of the root StackPane
+		StackPane.setAlignment(resetButton, Pos.TOP_LEFT);
+		StackPane.setAlignment(group, Pos.CENTER);
+		root.getChildren().addAll(resetButton, group);
+
 		// Create the scene with a minimum size
 		Scene scene = new Scene(root, CHART_WIDTH, CHART_HEIGHT);
 
 		// Enable zooming using mouse scroll
 		enableZoom(scene, group);
-
-		Button resetButton = createResetButton(group);
-
-		// Set the content Group as the child of the root StackPane
-		StackPane.setAlignment(group, Pos.CENTER);
-		StackPane.setAlignment(resetButton, Pos.TOP_LEFT);
-		root.getChildren().addAll(group, resetButton);
 
 		// Set the stage title and scene
 		primaryStage.setTitle("Hierarchical Org Chart Example");
