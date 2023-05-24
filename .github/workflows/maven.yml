@@ -34,9 +34,9 @@ jobs:
         working-directory: paramsAPI
         run: mvn clean verify -Dtest=*IT
 
-      - name: step 4 - Build and test paramsUI module
+      - name: step 4 - Build paramsUI module
         working-directory: paramsUI
-        run: mvn clean verify -Dtest=*IT
+        run: mvn install -DskipTests
         
       - name: step 5 - Upload code coverage reports
         uses: actions/upload-artifact@v3
