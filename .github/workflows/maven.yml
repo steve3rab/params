@@ -34,7 +34,7 @@ jobs:
         working-directory: paramsAPI
         run: |
           echo "Loading... Running unit tests for paramsAPI"
-          mvn test -Dtest=*IT
+          mvn clean verify -Dtest=*IT
 
       - name: Step 4 - Upload test results
         uses: actions/upload-artifact@v3
