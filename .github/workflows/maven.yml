@@ -29,14 +29,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+          
+      - name: Step 3 - Run unit tests
+        working-directory: paramsAPI
+        run: |
+          echo "Loading... Running unit tests"
+          mvn test -Dtest=*IT
 
-      - name: step 3 - Build and assemble modules
+      - name: step 4 - Build and assemble modules
         working-directory: .
         run: |
           echo "Loading... Building and assembling modules"
-          mvn clean install -P assemble-modules -pl paramsAPI
+          mvn clean install -DskipTests -P assemble-modules
         
-      - name: step 4 - Upload code coverage reports
+      - name: step 5 - Upload code coverage reports
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
