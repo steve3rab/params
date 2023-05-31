@@ -19,9 +19,9 @@ public class ParameterGraphsDialog extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		ParameterGraphsModel model = new ParameterGraphsModel();
-		ParameterGraphsView view = new ParameterGraphsView();
-		ParameterGraphsController controller = new ParameterGraphsController(model, view);
+		var model = new ParameterGraphsModel();
+		var view = new ParameterGraphsView();
+		var controller = new ParameterGraphsController(model, view);
 
 		// Initialize the controller
 		controller.initialize();
@@ -30,13 +30,13 @@ public class ParameterGraphsDialog extends Application {
 		view.getResetButton().setOnAction(event -> controller.resetZoom());
 
 		// Create the root StackPane and set the view components
-		StackPane root = new StackPane();
+		var root = new StackPane();
 		StackPane.setAlignment(view.getResetButton(), Pos.TOP_LEFT);
 		StackPane.setAlignment(view.getChartGroup(), Pos.CENTER);
 		root.getChildren().addAll(view.getResetButton(), view.getChartGroup());
 
 		// Create the scene and set it to the stage
-		Scene scene = new Scene(root, ParameterGraphsController.getChartWidth(),
+		var scene = new Scene(root, ParameterGraphsController.getChartWidth(),
 				ParameterGraphsController.getChartHeight());
 
 		// Enable zooming using mouse scroll

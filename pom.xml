@@ -127,6 +127,16 @@
 
 	<profiles>
 		<profile>
+			<id>assemble-modules</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>paramsAPI</module>
+				<module>paramsUI</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>build-paramsAPI</id>
 			<modules>
 				<module>paramsAPI</module>
@@ -135,13 +145,6 @@
 		<profile>
 			<id>build-paramsUI</id>
 			<modules>
-				<module>paramsUI</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>assemble-modules</id>
-			<modules>
-				<module>paramsAPI</module>
 				<module>paramsUI</module>
 			</modules>
 		</profile>
