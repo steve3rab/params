@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -28,27 +30,32 @@ public class ParameterGraphsController {
 	/**
 	 * Chart minimum scale.
 	 */
-	private static final double MIN_SCALE = 0.1;
+	private static final double MIN_SCALE = 0.1d;
 
 	/**
 	 * Chart maximum scale.
 	 */
-	private static final double MAX_SCALE = 10.0;
+	private static final double MAX_SCALE = 10.0d;
 
 	/**
 	 * Chart scale delta.
 	 */
-	private static final double SCALE_DELTA = 1.1;
+	private static final double SCALE_DELTA = 1.1d;
 
 	/**
 	 * Chart width.
 	 */
-	private static final double CHART_WIDTH = 600.0;
+	private static final double CHART_WIDTH = 800.0d;
+
+	/**
+	 * Shift amount.
+	 */
+	private static final double SHIFT_AMOUNT = 10.0d;
 
 	/**
 	 * Chart height.
 	 */
-	private static final double CHART_HEIGHT = 400.0;
+	private static final double CHART_HEIGHT = 500.0;
 
 	private final ParameterGraphsModel model;
 	private final ParameterGraphsView view;
@@ -202,6 +209,51 @@ public class ParameterGraphsController {
 	 */
 	public void resetZoom() {
 		view.getChartGroup().getTransforms().clear();
+	}
+
+	/**
+	 * Handles the shift action by shifting the chart group. The amount of shift is
+	 * defined by the shiftAmount variable.
+	 *
+	 * @param scene The Scene to enable shift on.
+	 */
+	public void enableShift(Scene scene) {
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			event.consume();
+
+			double currentTranslateX = view.getChartGroup().getTranslateX();
+			double currentTranslateY = view.getChartGroup().getTranslateY();
+			double newTranslateX = 0.0d;
+			double newTranslateY = 0.0d;
+
+			KeyCode keyCode = event.getCode();
+			switch (keyCode) {
+			case RIGHT:
+				// Handle shift right action
+				newTranslateX = currentTranslateX + SHIFT_AMOUNT;
+				view.getChartGroup().setTranslateX(newTranslateX);
+				break;
+			case LEFT:
+				// Handle shift left action
+
+				newTranslateX = currentTranslateX - SHIFT_AMOUNT;
+				view.getChartGroup().setTranslateX(newTranslateX);
+				break;
+			case UP:
+				// Handle shift up action
+				newTranslateY = currentTranslateY - SHIFT_AMOUNT;
+				view.getChartGroup().setTranslateY(newTranslateY);
+				break;
+			case DOWN:
+				// Handle shift down action
+				newTranslateY = currentTranslateY + SHIFT_AMOUNT;
+				view.getChartGroup().setTranslateY(newTranslateY);
+				break;
+			default:
+				// Ignore other keys
+				break;
+			}
+		});
 	}
 
 	public static double getChartWidth() {

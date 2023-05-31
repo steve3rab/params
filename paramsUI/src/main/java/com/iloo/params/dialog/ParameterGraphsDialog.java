@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -27,13 +28,19 @@ public class ParameterGraphsDialog extends Application {
 		controller.initialize();
 
 		// Set up the UI elements and configure event handling
-		view.getResetButton().setOnAction(event -> controller.resetZoom());
+		Button resetButton = view.getResetButton();
+		resetButton.setOnAction(event -> {
+			event.consume();
+			controller.resetZoom();
+		});
 
 		// Create the root StackPane and set the view components
 		var root = new StackPane();
-		StackPane.setAlignment(view.getResetButton(), Pos.TOP_LEFT);
+
+		StackPane.setAlignment(resetButton, Pos.TOP_LEFT);
 		StackPane.setAlignment(view.getChartGroup(), Pos.CENTER);
-		root.getChildren().addAll(view.getResetButton(), view.getChartGroup());
+
+		root.getChildren().addAll(resetButton, view.getChartGroup());
 
 		// Create the scene and set it to the stage
 		var scene = new Scene(root, ParameterGraphsController.getChartWidth(),
@@ -41,6 +48,8 @@ public class ParameterGraphsDialog extends Application {
 
 		// Enable zooming using mouse scroll
 		controller.enableZoom(scene, view.getChartGroup());
+		// Enable shift using keyboard
+		controller.enableShift(scene);
 
 		primaryStage.setScene(scene);
 
