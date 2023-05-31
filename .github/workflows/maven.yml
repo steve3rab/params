@@ -35,16 +35,21 @@ jobs:
         run: |
           echo "Loading... Running unit tests"
           mvn test -Dtest=*IT
-
-      - name: step 4 - Build and assemble modules
-        working-directory: .
-        run: |
-          echo "Loading... Building and assembling modules"
-          mvn clean install -DskipTests -P assemble-modules
-        
+          
+      - name: Step 4 - Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: paramsAPI/target/surefire-reports
+          
       - name: step 5 - Upload code coverage reports
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: paramsAPI/target/site/jacoco/index.html
-        
+          
+      - name: step 6 - Build and assemble modules
+        working-directory: .
+        run: |
+          echo "Loading... Building and assembling modules"
+          mvn clean install -DskipTests -P assemble-modules
