@@ -18,7 +18,7 @@ public class ParameterGraphsView {
 	 */
 	public ParameterGraphsView() {
 		chartGroup = new Group();
-		resetButton = createButton("R-Zoom");
+		resetButton = new Button("R-Zoom");
 	}
 
 	/**
@@ -36,6 +36,7 @@ public class ParameterGraphsView {
 	 * @return The reset button.
 	 */
 	public Button getResetButton() {
+		createButton();
 		resetButton.setTranslateX(10);
 		resetButton.setTranslateY(10);
 		return resetButton;
@@ -43,17 +44,12 @@ public class ParameterGraphsView {
 
 	/**
 	 * Creates a styled button with a specified label.
-	 *
-	 * @param label The label text for the button.
-	 * @return The styled button.
 	 */
-	private Button createButton(String label) {
-		Button button = new Button(label);
-		button.setMinSize(60, 60);
-		button.setPrefSize(60, 60);
-		button.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-		button.setShape(new Circle(40));
-		return button;
+	private void createButton() {
+		resetButton.setMinSize(60, 60);
+		resetButton.setPrefSize(60, 60);
+		resetButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		resetButton.setShape(new Circle(40));
 	}
 
 }

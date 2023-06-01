@@ -92,7 +92,12 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.0.0</version>
 					<configuration>
-						<test>**/*IT.java</test>
+						<includes>
+							<include>**/*IT.java</include>
+						</includes>
+						<excludes>
+							<exclude>**/*Test.java</exclude>
+						</excludes>
 					</configuration>
 				</plugin>
 			</plugins>
