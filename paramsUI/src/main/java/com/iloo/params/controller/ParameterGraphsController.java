@@ -212,10 +212,9 @@ public class ParameterGraphsController {
 	}
 
 	/**
-	 * Handles the shift action by shifting the chart group. The amount of shift is
-	 * defined by the shiftAmount variable.
+	 * Enables the shift action on the given scene.
 	 *
-	 * @param scene The Scene to enable shift on.
+	 * @param scene the scene to enable shift action on
 	 */
 	public void enableShift(Scene scene) {
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -228,38 +227,47 @@ public class ParameterGraphsController {
 
 			KeyCode keyCode = event.getCode();
 			switch (keyCode) {
-			case RIGHT:
+			case RIGHT -> {
 				// Handle shift right action
 				newTranslateX = currentTranslateX + SHIFT_AMOUNT;
 				view.getChartGroup().setTranslateX(newTranslateX);
-				break;
-			case LEFT:
+			}
+			case LEFT -> {
 				// Handle shift left action
-
 				newTranslateX = currentTranslateX - SHIFT_AMOUNT;
 				view.getChartGroup().setTranslateX(newTranslateX);
-				break;
-			case UP:
+			}
+			case UP -> {
 				// Handle shift up action
 				newTranslateY = currentTranslateY - SHIFT_AMOUNT;
 				view.getChartGroup().setTranslateY(newTranslateY);
-				break;
-			case DOWN:
+			}
+			case DOWN -> {
 				// Handle shift down action
 				newTranslateY = currentTranslateY + SHIFT_AMOUNT;
 				view.getChartGroup().setTranslateY(newTranslateY);
-				break;
-			default:
+			}
+			default -> {
 				// Ignore other keys
-				break;
+			}
 			}
 		});
 	}
 
+	/**
+	 * Returns the chart width.
+	 *
+	 * @return the chart width
+	 */
 	public static double getChartWidth() {
 		return CHART_WIDTH;
 	}
 
+	/**
+	 * Returns the chart height.
+	 *
+	 * @return the chart height
+	 */
 	public static double getChartHeight() {
 		return CHART_HEIGHT;
 	}
