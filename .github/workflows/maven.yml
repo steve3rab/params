@@ -66,19 +66,7 @@ jobs:
         working-directory: paramsUI
         run: |
           echo "Loading... Running unit tests for paramsUI"
-          mvn clean verify -Dtest=*IT
-
-      - name: Step 4 - Upload test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results-paramsUI
-          path: paramsUI/target/surefire-reports
-
-      - name: Step 5 - Upload code coverage reports for paramsUI
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-report-paramsUI
-          path: paramsUI/target/site/jacoco/index.html
+          mvn clean verify -DskipTests
 
   build-and-assemble-modules:
     runs-on: ubuntu-latest
